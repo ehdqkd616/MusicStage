@@ -4,7 +4,6 @@
 <!-- mybatis-config.xml에서 mapper 등록 -->
 <mapper namespace="wsMapper">
 
-
 	<!-- ALARM ResultSet -->
 	<resultMap type="Alarm" id="alarmResultSet">
 		<id property="alarm_no" column="ALARM_NO" />			
@@ -123,7 +122,7 @@
 	
 	<insert id="saveNoticeAlarm" parameterType="Map">
 		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ETC_BOARD_NO)
-		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'Notice', SYSTIMESTAMP, '1', 'alarmDetail.ws', #{alarm_sender}, EB_SEQ.CURRVAL)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'Notice', SYSTIMESTAMP, '1', 'alarmDetail.ws', #{alarm_sender}, null)
 	</insert>
 	
 	<insert id="saveRegisterYesAlarm" parameterType="Map">

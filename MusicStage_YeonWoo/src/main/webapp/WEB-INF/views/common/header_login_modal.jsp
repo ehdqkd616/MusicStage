@@ -223,6 +223,13 @@ label.keep-login {
         		$(".login_frm").attr("action", "join1.me").submit();
         	}
         });
+        
+        $(".login_frm").keypress(function (e){
+        	if(e.keyCode == 13){
+        		$(".login_frm").attr("action", "login.me").submit();
+        	}
+        });
+        
     </script>
 </body>
 </html>

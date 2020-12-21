@@ -374,6 +374,7 @@ textarea{
 						
 					}
 					$(".messageUl").find(".messageLi:last").after(str);
+					$('main').scrollTop($('main')[0].scrollHeight);
 					
 				}
 				// 입장
@@ -471,7 +472,6 @@ textarea{
  	 	 	 	 				console.log(messageVO);
  	 	 	 	 				chatSocket.send(JSON.stringify(messageVO));
  	 	 	 	 				$("#chattxt").val("");
-	 	 	 	 	 			$('main').scrollTop($('main')[0].scrollHeight);
 	 	 	 	 	 			$("#chattxt").focus();
  	 	 	 	 			}
  			

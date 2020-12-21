@@ -15,17 +15,6 @@
 		<result property="lastMessage_time" column="LASTMESSAGE_TIME" />	
 		<result property="unRead_message" column="UNREAD_MESSAGE" />	
 	</resultMap>
-
-	<!-- JoinRoom ResultSet2 -->
-	<resultMap type="JoinRoom" id="joinRoomResultSet2">
-		<id property="join_id" column="JOIN_ID" />			
-		<result property="chatRoom_id" column="CHATROOM_ID" />
-		<result property="join_userId" column="JOIN_USERID" />
-		<result property="join_user_nickName" column="JOIN_USER_NICKNAME" />
-		<result property="join_user_profile_pic" column="JOIN_USER_PROFILE_PIC" />
-		<result property="lastMessage" column="LASTMESSAGE" />
-		<result property="lastMessage_time" column="LASTMESSAGE_TIME" />	
-	</resultMap>	
 	
 	<!-- Message ResultSet -->
 	<resultMap type="Message" id="messageResultSet">
@@ -69,30 +58,6 @@
 		                                                        WHERE JOIN_USERID = #{userId})
 		ORDER BY LASTMESSAGE_TIME DESC
 	</select>
-	
-	
- 	<!-- 현재 참여하고 있는 채팅방 목록 불러오기 원본 --> 
-<!-- 	<select id="getJoinRoomList2" resultMap="joinRoomResultSet2"> -->
-<!-- 		SELECT J.*, M.NICKNAME AS "JOIN_USER_NICKNAME", M.PROFILE_PIC AS "JOIN_USER_PROFILE_PIC",  -->
-<!-- 		(SELECT MESSAGE_CONTENT -->
-<!-- 		FROM (SELECT MESSAGE_CONTENT -->
-<!-- 		        FROM MESSAGE MG -->
-<!-- 		        WHERE MG.CHATROOM_ID = J.CHATROOM_ID -->
-<!-- 		        ORDER BY MESSAGE_ID DESC) -->
-<!-- 		WHERE ROWNUM = 1) AS "LASTMESSAGE", -->
-<!-- 		(SELECT MESSAGE_SENDTIME -->
-<!-- 		FROM (SELECT MESSAGE_SENDTIME -->
-<!-- 		        FROM MESSAGE MG -->
-<!-- 		        WHERE MG.CHATROOM_ID = J.CHATROOM_ID -->
-<!-- 		        ORDER BY MESSAGE_ID DESC) -->
-<!-- 		WHERE ROWNUM = 1) AS "LASTMESSAGE_TIME" -->
-<!-- 		FROM JOIN_ROOM J INNER JOIN MEMBER M -->
-<!-- 		ON(J.JOIN_USERID = M.USERID) -->
-<!-- 		WHERE J.JOIN_USERID != #{userId} AND J.CHATROOM_ID IN (SELECT CHATROOM_ID -->
-<!-- 		                                                        FROM JOIN_ROOM  -->
-<!-- 		                                                        WHERE JOIN_USERID = #{userId}) -->
-<!-- 		ORDER BY LASTMESSAGE_TIME DESC -->
-<!-- 	</select> -->
 	
 	<!-- 매세지 목록 전체 불러오기 -->
 	<select id="getMessageList" resultMap="messageResultSet">

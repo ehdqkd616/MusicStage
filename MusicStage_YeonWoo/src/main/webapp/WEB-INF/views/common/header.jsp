@@ -178,9 +178,12 @@
 <script>
 	var socket = null;
 	var chatSocket = null;
+	var loginUser = "${loginUser.userId}";
 	
 	$(document).ready(function() {
-		connectWs();
+		if(loginUser != null){
+			connectWs();		
+		}
 	});
 
 	function connectWs() {
