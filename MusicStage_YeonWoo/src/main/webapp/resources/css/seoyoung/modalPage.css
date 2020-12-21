@@ -1,0 +1,132 @@
+@charset "UTF-8";
+/* 여기서부터 서영. */
+/* bxslider에서 양옆 화살표 */
+.bx-controls-direction a { z-index: 0 !important; }
+/* 메인 영역 */
+.main_modal_table { width: 800px; height: 500px; border-spacing: 0px; }
+
+/* 사진, 동영상 td */
+.modalType_img_td { width: 500px; height: 500px; border-right: 1px solid #DBDBDB; }
+/* 사용o >> 썸네일만 있을경우  */
+.modalType_img_td .modalOnlyThumbnail{
+	height: 100%;
+    max-width: 100%;
+    margin: auto;
+    display:flex; 
+    align-items:center;
+}
+
+/* 사용o >> 썸네일 + 파일들일경우 */
+.modalType_img_td .modalImage{
+	position:absolute;
+    max-width:100%;
+    margin:auto;
+    top:0; bottom:0; left:0; right:0;
+}
+
+.modalType_img_td video { width: 100%; height: 100%; }
+/* .modalType_img_td audio { position: relative; top: 200px; left: 120px; } */
+.modalType_img_td audio { width: 500px; height: 500px; }
+
+.md_list_video { height: 500px; }
+
+/* 프로필, 닉네임 td */
+.modalType_profile_td { height: 70px; padding: 10px; border-bottom: 1px solid #DBDBDB; }
+.modalType_profile_td img { vertical-align: middle; /* 프로필사진, 닉네임 세로 가운데 정렬. table이랑 td에는 안먹히고 여기에만 먹힘. 이해x */
+							width: 50px; height: 50px; border-radius: 50%; }
+.modalType_profile_td button { float: right; border: none; outline: none; background:transparent; cursor: pointer;
+							   font-size: 30px; font-weight: bold; margin: auto; }
+.modalType_nickname_link { vertical-align: middle; }
+
+/* 글내용 td */
+.modalType_content_td { padding: 15px 10px 10px 10px; border-bottom: 1px solid #DBDBDB; height: 220px; vertical-align: top; }
+.modalType_title_div { font-weight: 700; font-size: 18px; }
+.modalType_content_div { width: 280px; height: 90px; margin-top: 10px; overflow: auto; }
+.modal_button_div { /* margin: 20px 10px 0px 10px; */ text-align: center; }
+.modal_button_div button { border: 1px solid #DBDBDB; border-radius: 5px; background: transparent; padding: 5px 10px; margin-top: 10px;}
+
+/* 좋아요 ~ 보관하기 td */
+.modalType_icon_td {border-bottom: 1px solid #DBDBDB; color: #4B4B4B; font-size: 12px; padding: 5px 10px 5px 10px; vertical-align: top;
+					display: flex; flex-direction: column; height: 160px;}
+.forscroll { height: 120px; overflow: auto; }
+.icon_div { }
+.height { height: 40px; margin-top: 5px; margin-top: auto;}
+
+
+
+/* 모달 속 댓글 css 추가 (12/2) */
+.md_comment_box { /* margin-top: 10px; */ }
+.md_comment_plus_div { margin: 2px 0px 0px 15px; }
+.md_child_comment_write_box { border: 1px solid #e9e9e9; margin-left: 15px; border-radius: 5px; }
+.md_child_comment_box { margin-left: 15px; width: 250px; }
+.md_child_comment_write_box input[type="text"] { width: 202px; border: none; outline: none; padding: 0px;}
+.md_child_comment_write_box input[type="submit"] { width: 40px; border: none; background: none; outline: none; cursor: pointer;
+												   font-weight: 600; color: #A7543A;}
+.md_comment_writer { width: 50px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: bolder; }
+.md_commnent_content { width: 215px; padding-left: 5px;}
+
+
+
+
+/* 아이콘 크기 */
+.modalType_icon { width: 20px; height: 20px; }
+
+/* 보관함 아이콘 */
+.keepIcon { /* float: right; */ /* 아이콘 오른쪽 정렬 */ }
+
+/* 댓글 달기 td */
+.modalType_comment_input_td { height: 40px; }
+.modalType_comment_input_td input[type="text"] { border: none; outline: none; width: 260px; padding: 0px; }
+.modalType_comment_input_td input[type="submit"] { border: none; background: none; outline: none; cursor: pointer;
+												   font-weight: 600; color: #A7543A; }
+												   
+/* modalType으로 열렸을 때의 modal */
+/* 참고 사이트 - new93helloworld.tistory.com/135 */
+.modalType_modal { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
+		 		   background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.5); }
+.modalType_content { background-color: white; margin: 10% auto !important; border: none; width: 800px; }
+
+/* modalType 상태에서의 ···버튼 modal */
+#modalType_plus_modal { display: none; position: fixed; z-index: 5; top: 0; left: 0; width: 100%; height: 100%;
+		 				overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.5); }
+#modalType_my_plus_list { background-color: white; margin: 15% auto; border: none;
+						  width: 400px; /* Could be more or less, depending on screen size */ height: 155px;
+						  text-align: center; border: 1px solid #DBDBDB; border-radius: 10px; background: white; }
+#modalType_my_plus_list button { border: none; outline: none; background:transparent; cursor: pointer;
+								 width: 400px; height: 50px; }
+
+/* 신고하기 모달 start */
+   #n_area{ width: 700px; height: 400px; border-radius: 15px !important; padding: 15px;}
+   #n_letter{ text-align: left; font-size: 14px; font-weight: bolder; padding-left: 15px; margin-bottom: 20px;}
+   #n_select{ border-radius: 5px; border: 2px solid #DBDBDB;}
+   #n_text{ width: 640px; height: 270px; border: 2px solid #DBDBDB; resize: none;}
+   #n_notify{ width: 80px; height: 30px; border-radius: 6px; border: none; background: #521110; color: white;}
+   #n_cancel{ width: 50px; height: 30px; border-radius: 6px; border: none; background: gray; color: white;}
+
+.n_button { margin: 15px;}
+/* modal test */
+/* ////////// */
+#report_modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.5);
+}
+
+#n_area {
+	background-color: white;
+	margin: 12% auto;
+    border: none;
+    /* width: 400px; */ /* Could be more or less, depending on screen size */
+	/* height: 205px; */
+	text-align: center;
+	border: 1px solid #DBDBDB;
+	border-radius: 10px;
+	background: white;
+}

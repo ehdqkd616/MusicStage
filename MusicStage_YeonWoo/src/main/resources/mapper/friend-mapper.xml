@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="friendMapper">
+	<select id="selectInt" resultMap="selecVoSet">
+		select like_interest
+		from member
+		join like_interests_management on(userid = like_interest_user)
+		where userid = #{userid}
+	</select>
+	
+	<select id="selectIntList" parameterType="selecVo" resultType="string">
+	
+	select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                             <![CDATA[where rownum <= 4]]>)
+                                    where rn = 1)
+intersect
+
+select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                          where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                             <![CDATA[where rownum <= 4]]>)
+                                    where rn =2)
+               intersect                     
+select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                           <![CDATA[where rownum <= 4]]>)
+                                    where rn =3)
+                     intersect                
+select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                            <![CDATA[where rownum <= 4]]>)
+                                    where rn = 4)                    
+	
+	</select>
+	
+	
+<select id="selectIntList3"  parameterType="selecVo"  resultType="string">
+select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                             <![CDATA[where rownum <= 4]]>)
+                                    where rn =1)
+intersect
+
+select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                          where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                            <![CDATA[where rownum <= 4]]>)
+                                    where rn = 2)
+               intersect                     
+select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                             <![CDATA[where rownum <= 4]]>)
+                                    where rn = 3)
+</select>
+
+<select id="selectIntList2"  parameterType="selecVo"  resultType="string">
+	select DISTINCT(like_interests_management.like_interest_user)
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                            <![CDATA[where rownum <= 4]]>)
+                                    where rn =  1)
+intersect
+
+select like_interests_management.like_interest_user
+from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                            <![CDATA[where rownum <= 4]]>)
+                                    where rn =  2)
+</select>
+
+<select id="selectIntList1"  parameterType="selecVo"  resultType="string">
+	select DISTINCT(like_interests_management.like_interest_user)
+		from like_interests_management
+        where like_interest = (select like_interest
+                                    from    (select like_interest,rn
+                                    from(select like_interest,rownum as rn
+                                            from like_interests_management
+                                            where like_interest_user =#{userid}
+                                            order by like_interest asc)
+                                            <![CDATA[where rownum <= 4]]>)
+                                    where rn = 1)
+</select>
+
+<select id="selectNick" resultType="_int">
+	select count(*)
+	from member
+	where NICKNAME = #{m_nick}
+</select>
+<select id="selectEmail" resultType="_int">
+	select count(*)
+	from member
+	where EMAIL = #{m_email}
+</select>
+
+<update id="update"  parameterType="Member">
+	update member  
+	set NICKNAME=#{nickname},USERNAME=#{name},EMAIL=#{name},PHONE=#{phone},ADDRESS=#{address},URL_ADDRESS=#{url}
+	where userid = #{userid}
+</update>
+
+<select id="selectIntselectListList" parameterType="string" resultMap="memberResultSet">
+	select *
+	from member
+	where userid= #{userid}
+</select>
+<select id="selectInfoma" parameterType="string" resultMap="memberResultSet">
+	select *
+	from member
+	where userid = #{userid}
+</select>
+
+
+	<resultMap type="selecVo" id="selecVoSet">
+		<id column="LIKE_INTEREST" property="like_interest"/>
+		<result column="LIKE_INTEREST_USER"  property="like_interest_user"/>
+	</resultMap>
+	
+<resultMap type="Member" id="memberResultSet">
+		<id column="USERID" property="userId" />
+		<result column="PASSWORD" property="password" />
+		<result column="NICKNAME" property="nickName" />
+		<result column="USERNAME" property="userName" />
+		<result column="BIRTHDAY" property="birthDay" />
+		<result column="GENDER" property="gender" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE" property="phone" />
+		<result column="ADDRESS" property="address" />
+		<result column="URL_ADDRESS" property="url_address" />
+		<result column="ENABLED" property="enabled" />
+		<result column="REPORT_COUNT" property="report_count" />
+		<result column="PROFILE_PIC" property="profile_pic" />
+		<result column="JOIN_DATE" property="join_date" />
+		<result column="FOLLOWER_COUNT" property="follower_count" />
+		<result column="FOLLOWING_COUNT" property="following_count" />
+		<result column="INTRODUCE" property="introduce" />
+		<result column="PRO_APPROVE" property="pro_approve" />
+		<result column="AUTHORITY" property="authority" />
+		<!-- <result column="AUTHORITY" property="authority" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/> -->
+	</resultMap>
+	
+	 <resultMap type="register" id="registerSet">
+      <id column="REGISTER_NO" property="register_no"/>
+      <result column="SPECIALTY_FIELD" property="specialrt_field"/>
+      <result column="INTRODUCE" property="introduce"/>
+      <result column="SCHOOL_NAME" property="school_name"/>
+      <result column="MAJOR" property="major"/>
+      <result column="CAREER" property="career"/>
+      <result column="CERTIFICATION" property="certification"/>
+      <result column="SPECIAL_CATEGORY" property="top_special_category"/>
+      <result column="SERVICE_TYPE" property="service_type"/>
+      <result column="REGISTER_APPROVE" property="register_approve"/>
+      <result column="REGISTER_DATE" property="register_date"/>
+      <result column="REGISTER_USER" property="register_user"/>
+   </resultMap>
+   
+   <resultMap type="UserM" id="UserM">
+   		<id column="USERID" property="id"/>
+   		<result column="PRO_APPROVE" property="che"/>
+   </resultMap>
+   
+   <resultMap type="registerfile" id="registerfileSet">
+      <id column="FILE_NUMBER" property="file_number"/>
+      <result column="FILE_ORIGIN_NAME" property="file_origin_name"/>
+      <result column="FILE_CHANGE_NAME" property="file_change_name"/>
+      <result column="FILE_EXTENSION_NAME" property="file_extension_name"/>
+      <result column="FILE_SIZE" property="file_size"/>
+      <result column="FILE_UPLOAD_DATE" property="file_upload_date"/>
+      <result column="FILE_PATH" property="file_path"/>
+      <result column="FILE_THUMBNAIL" property="file_thumbnail"/>
+      <result column="BOARD_NUMBER" property="register_no"/>
+      <result column="FILE_TYPE" property="file_type"/>
+      <result column="FILE_UPLOADER"  property="file_upload"/>
+   </resultMap>
+	
+	
+	
+	<select id="selectPro" parameterType="string" resultMap="registerSet">
+		select * from register_pro where register_user = #{userId}
+	</select>
+	
+	<select id="selectUserId" parameterType="Member" resultMap="memberResultSet">
+		select * from member where USERNAME = #{userName} and EMAIL = #{email}
+	</select>
+	
+	<update id="findPwd" parameterType="Member">
+		update member
+		set PASSWORD =#{password}
+		where USERID = #{userId}
+	</update>
+	
+	<select id="selectfile" parameterType="registerfile" resultMap="registerfileSet">
+		select *from register_file where file_uploader = #{file_upload}
+	</select>
+	<delete id="filedelect" parameterType="_int" >
+		delete  from register_file where  FILE_NUMBER = #{num}
+	</delete>
+	<update id="updatePro" parameterType="register">
+		update  register_pro
+		set		SPECIALTY_FIELD = #{specialrt_field},INTRODUCE = #{introduce},SCHOOL_NAME = #{school_name},MAJOR=#{major},CAREER=#{career},CERTIFICATION=#{certification},SPECIAL_CATEGORY=#{top_special_category},SERVICE_TYPE=#{service_type},REGISTER_DATE=sysdate,REGISTER_APPROVE=#{register_approve},REGISTER_USER=#{register_user}
+		where  REGISTER_NO = #{register_no}
+	</update>
+	
+	  <insert id="insertFile" parameterType="registerfile" >
+      insert into REGISTER_FILE VALUES(${file_number},#{file_origin_name},#{file_change_name},#{file_extension_name},#{file_size},sysdate,#{file_path},#{file_thumbnail},${register_no},${file_type},#{file_upload})
+   	  </insert>	
+   
+   <update id="updateMem" parameterType="UserM">
+  	 update member
+  	 set PRO_APPROVE=#{che}
+  	 where USERID=#{id}
+   </update>
+   
+   
+</mapper>

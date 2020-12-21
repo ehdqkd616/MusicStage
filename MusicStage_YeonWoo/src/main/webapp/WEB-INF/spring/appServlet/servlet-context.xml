@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+	
+	<!-- websocket handler -->
+	<beans:bean id="echoHandler" class="com.musicstage.spring.websocket.handler.EchoHandler" />
+	
+    <websocket:handlers>
+        <websocket:mapping handler="echoHandler" path="/echo" />
+        <websocket:handshake-interceptors>
+            <beans:bean
+                class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <websocket:sockjs/>
+    </websocket:handlers>
+    
+    <!-- chatting handler -->
+	<beans:bean id="chatHandler" class="com.musicstage.spring.websocket.handler.ChatHandler" />
+
+    <websocket:handlers>
+        <websocket:mapping handler="chatHandler" path="/chat" />
+        <websocket:handshake-interceptors>
+            <beans:bean
+                class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <websocket:sockjs/>
+    </websocket:handlers>    
+	
+	<beans:bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />	
+	
+	<!-- contextRoot -->
+	<view-controller path="/" view-name="home" />
+	
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.musicstage.spring" />
+	
+	<!-- LoginInterceptor -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/*.me"/>
+			<mapping path="/*.st"/>
+			<mapping path="/*.bo"/>
+			<mapping path="/*.ad"/>
+			<mapping path="/*.ws"/>
+			<mapping path="/*.ct"/>
+
+			<!-- 로그인 안했을때 이용 가능한 기능 -->
+			<exclude-mapping path="/login.me"/>
+			<exclude-mapping path="/join1.me"/>
+			<exclude-mapping path="/join2.me"/>
+			<exclude-mapping path="/isExistID.me"/>
+			<exclude-mapping path="/address.me"/>
+			<exclude-mapping path="/api/join.me"/>
+			<exclude-mapping path="/join3.me"/>
+			<exclude-mapping path="/insertMember.me"/>
+			<exclude-mapping path="/join4.me"/>
+			<exclude-mapping path="/regiFinal.me"/>
+			<exclude-mapping path="/callback.me"/>
+			<exclude-mapping path="/isExistNickName.st"/>
+			
+			<exclude-mapping path="/socialFeed.bo"/>
+			<exclude-mapping path="/findFeed.bo"/>
+			<exclude-mapping path="/columnFeed.bo"/>
+			<exclude-mapping path="/reviewFeed.bo"/>
+			<exclude-mapping path="/search.bo"/>
+			<exclude-mapping path="/searchType.bo"/>
+			
+			<beans:bean id="loginInterceptor" class="com.musicstage.spring.common.interceptor.LoginInterceptor" />
+		</interceptor>
+	</interceptors>	
+	
+	
+</beans:beans>

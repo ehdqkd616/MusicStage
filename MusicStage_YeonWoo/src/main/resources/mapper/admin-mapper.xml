@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- namespace : 연결하고 싶은 mapper를 구분하는 속성 -->
+<!-- mybatis-config.xml에서 mapper 등록 -->
+<mapper namespace="adminMapper">
+	
+	<!-- ETC_BOARD ResultSet -->
+	<resultMap type="ETCBoard" id="etcBoardResultSet">
+		<id property="board_number" column="BOARD_NUMBER" />			
+		<result property="board_category" column="BOARD_CATEGORY" />
+		<result property="board_title" column="BOARD_TITLE" />
+		<result property="board_content" column="BOARD_CONTENT" />
+		<result property="board_enabled" column="BOARD_ENABLED" />
+		<result property="b_write_date" column="B_WRITE_DATE" />
+		<result property="b_writer" column="B_WRITER" />	
+		<result property="b_writer_nickName" column="NICKNAME" />
+		<result property="b_writer_profile_pic" column="PROFILE_PIC" />
+	</resultMap>	
+	
+	<!-- ETC_BOARD_REPLY ResultSet -->
+	<resultMap type="ETCBoardReply" id="etcBoardReplyResultSet">
+		<id property="reply_number" column="REPLY_NUMBER" />			
+		<result property="reply_content" column="REPLY_CONTENT" />
+		<result property="r_write_date" column="R_WRITE_DATE" />
+		<result property="reply_enabled" column="REPLY_ENABLED" />
+		<result property="board_number" column="BOARD_NUMBER" />
+		<result property="r_writer" column="R_WRITER" />
+		<result property="r_writer_nickName" column="NICKNAME" />
+		<result property="r_writer_profile_pic" column="PROFILE_PIC" />
+	</resultMap>
+	
+	<!-- REPORT_BOARD ResultSet -->
+	<resultMap type="ReportBoard2" id="reportBoardResultSet">
+		<id property="report_no" column="REPORT_NO" />			
+		<result property="report_content" column="REPORT_CONTENT" />
+		<result property="report_date" column="REPORT_DATE" />
+		<result property="report_status" column="REPORT_STATUS" />
+		<result property="board_report_category" column="BOARD_REPORT_CATEGORY" />
+		<result property="board_report_category_name" column="BOARD_REPORT_CATEGORY_NAME" />
+		<result property="report_board" column="REPORT_BOARD" />
+		<result property="report_board_title" column="BOARD_TITLE" />
+		<result property="report_board_writer" column="B_WRITER" />
+		<result property="report_board_writer_nickName" column="B_WRITER_NICKNAME" />
+		<result property="report_from" column="REPORT_FROM" />
+		<result property="report_from_nickName" column="NICKNAME" />
+	</resultMap>	
+	
+	<!-- REPORT_MEMBER ResultSet -->
+	<resultMap type="ReportMember" id="reportMemberResultSet">
+		<id property="report_no" column="REPORT_NO" />			
+		<result property="report_content" column="REPORT_CONTENT" />
+		<result property="report_date" column="REPORT_DATE" />
+		<result property="report_status" column="REPORT_STATUS" />
+		<result property="member_report_category" column="MEMBER_REPORT_CATEGORY" />
+		<result property="member_report_category_name" column="MEMBER_REPORT_CATEGORY_NAME" />
+		<result property="report_to" column="REPORT_TO" />
+		<result property="report_to_nickName" column="REPORT_TO_NICKNAME" />
+		<result property="report_from" column="REPORT_FROM" />
+		<result property="report_from_nickName" column="REPORT_FROM_NICKNAME" />
+	</resultMap>
+	
+	<!-- REGISTER_PRO ResultSet -->
+	<resultMap type="RegisterPro" id="registerProApproveResultSet">
+		<id property="register_no" column="REGISTER_NO" />			
+		<result property="specialty_field" column="SPECIALTY_FIELD" />
+		<result property="introduce" column="INTRODUCE" />
+		<result property="school_name" column="SCHOOL_NAME" />
+		<result property="major" column="MAJOR" />
+		<result property="career" column="CAREER" />
+		<result property="certification" column="CERTIFICATION" />
+		<result property="special_category" column="SPECIAL_CATEGORY" />
+		<result property="service_type" column="SERVICE_TYPE" />
+		<result property="register_approve" column="REGISTER_APPROVE" />
+		<result property="register_date" column="REGISTER_DATE" />
+		<result property="register_user" column="REGISTER_USER" />
+		<result property="register_user_nickName" column="NICKNAME" />
+		<result property="register_user_profile_pic" column="PROFILE_PIC" />
+	</resultMap>	
+
+	<!-- BOARD ResultSet -->
+	<resultMap type="BoardApprove" id="boardApproveResultSet">
+		<id property="board_number" column="BOARD_NUMBER"/>
+		<result property="board_title" column="BOARD_TITLE"/>
+		<result property="board_content" column="BOARD_CONTENT"/>
+		<result property="read_count" column="READ_COUNT"/>
+		<result property="like_count" column="LIKE_COUNT"/>
+		<result property="board_enabled" column="BOARD_ENABLED"/>
+		<result property="report_count" column="REPORT_COUNT"/>
+		<result property="b_write_date" column="B_WRITE_DATE"/>
+		<result property="b_modify_date" column="B_MODIFY_DATE"/>
+		<result property="board_approve" column="BOARD_APPROVE"/>
+		<result property="sub_curriculum" column="SUB_CURRICULUM"/>
+		<result property="sub_address" column="SUB_ADDRESS"/>
+		<result property="sub_delivery_format" column="SUB_DELIVERY_FORMAT"/>
+		<result property="search_type" column="SEARCH_TYPE"/>
+		<result property="sub_category" column="SUB_CATEGORY"/>
+		<result property="board_category" column="BOARD_CATEGORY"/>
+		<result property="board_category_name" column="BOARD_CATEGORY_NAME"/>
+		<result property="b_writer" column="B_WRITER"/>
+		<result property="b_writer_nickName" column="NICKNAME"/>
+	</resultMap>	
+	
+	<!-- 공지사항 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getNoticeListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM ETC_BOARD
+		WHERE BOARD_ENABLED = '1' AND BOARD_CATEGORY = '공지사항'
+	</select>
+	
+	<!-- 공지사항 목록 -->
+	<select id="selectNoticeList" resultMap="etcBoardResultSet">
+		SELECT EB.*, M.NICKNAME, M.PROFILE_PIC
+		FROM ETC_BOARD EB INNER JOIN MEMBER M
+		ON(EB.B_WRITER = M.USERID)
+		WHERE BOARD_ENABLED = '1' AND BOARD_CATEGORY = '공지사항'
+		ORDER BY BOARD_NUMBER DESC 
+	</select>
+	
+	<!-- INSERT ETC_BOARD -->
+	<insert id="insertEtcBoard" parameterType="ETCBoard">
+		INSERT INTO ETC_BOARD
+		VALUES(EB_SEQ.NEXTVAL, #{board_category}, #{board_title}, #{board_content},
+			   '1', SYSTIMESTAMP, #{b_writer})
+	</insert>
+	
+	<!-- UPDATE ETC_BOARD -->
+	<update id="updateEtcBoard" parameterType="ETCBoard">
+		UPDATE ETC_BOARD
+		SET BOARD_TITLE=#{board_title}, BOARD_CONTENT=#{board_content}
+		WHERE BOARD_NUMBER=#{board_number}
+	</update>
+	
+	<!-- DELETE ETC_BOARD -->
+	<update id="deleteEtcBoard" parameterType="_int">
+		UPDATE ETC_BOARD
+		SET BOARD_ENABLED = '0'
+		WHERE BOARD_NUMBER = #{board_number}
+	</update>
+	
+	<!-- INSERT NOTICE -->
+	<insert id="insertNotice" parameterType="ETCBoard">
+		
+		<!-- 임시 insert -->	
+		INSERT INTO ETC_BOARD
+		VALUES(EB_SEQ.NEXTVAL, '공지사항', #{board_title}, #{board_content},
+			   '1', SYSTIMESTAMP, 'admin')
+	</insert>	
+
+	<!-- UPDATE NOTICE -->
+	<update id="updateNotice" parameterType="ETCBoard">
+		UPDATE ETC_BOARD
+		SET BOARD_TITLE=#{board_title}, BOARD_CONTENT=#{board_content}
+		WHERE BOARD_NUMBER=#{board_number}
+	</update>	
+	
+	<!-- DELETE NOTICE -->
+	<update id="deleteNotice" parameterType="_int">
+		UPDATE ETC_BOARD
+		SET BOARD_ENABLED = '0'
+		WHERE BOARD_NUMBER = #{board_number}
+	</update>	
+	
+	<!-- SELECT NOTICE -->
+	<select id="selectNotice" parameterType="_int" resultMap="etcBoardResultSet">
+		SELECT EB.*, M.NICKNAME, M.PROFILE_PIC
+		FROM ETC_BOARD EB INNER JOIN MEMBER M
+		ON(EB.B_WRITER = M.USERID)
+		WHERE BOARD_ENABLED = '1' AND BOARD_CATEGORY = '공지사항' AND BOARD_NUMBER=#{board_number}
+	</select>
+	
+
+	<!-- INSERT QA -->
+	<insert id="insertQA" parameterType="ETCBoard">	
+		<!-- 임시 insert -->	
+		INSERT INTO ETC_BOARD
+		VALUES(EB_SEQ.NEXTVAL, 'QA', #{board_title}, #{board_content},
+			   '1', SYSTIMESTAMP, #{b_writer})
+	</insert>
+		
+	<!-- INSERT QA_REPLY(ETC_BOARD_REPLY) -->
+	<insert id="insertQAReply" parameterType="ETCBoardReply">
+		INSERT INTO ETC_BOARD_REPLY
+		VALUES(ER_SEQ.NEXTVAL, #{reply_content}, SYSTIMESTAMP, '1', #{board_number}, #{r_writer})
+	</insert>
+	
+	<!-- SELECT QA_REPLY LIST(ETC_BOARD_REPLY LIST) -->
+	<select id="selectQAReplytList" resultType="ETCBoardReply">
+		SELECT EBR.*, M.NICKNAME, M.PROFLIE_PIC
+		FROM ETC_BOARD_REPLY EBR INNER JOIN MEMBER M
+			 ON (EBR.R_WRITER = M.USERID)
+			 WHERE REPLY_ENABLED='1' AND BOARD_NUMBER = #{board_number}
+		ORDER BY REPLY_NUMBER ASC
+	</select>
+	
+	<!-- DELETE QA_REPLY(ETC_BOARD_REPLY) -->
+	<update id="deleteQAReply" parameterType="_int">
+		UPDATE ETC_BOARD_REPLY
+		SET REPLY_ENABLED = '0'
+		WHERE REPLY_NUMBER = #{reply_number}		
+	</update>
+	
+	<!-- 게시글 신고 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getBoardReportListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT_BOARD
+		WHERE REPORT_STATUS='W'
+	</select>	
+	
+	<!-- SELECT REPORT_BOARD LIST -->
+	<select id="selectBoardReportList" parameterType="_int" resultMap="reportBoardResultSet">
+		SELECT RB.*, BRC.BOARD_REPORT_CATEGORY_NAME, M.NICKNAME, B.BOARD_TITLE, B.B_WRITER, M2.NICKNAME AS "B_WRITER_NICKNAME"
+		FROM REPORT_BOARD RB INNER JOIN MEMBER M
+		ON(RB.REPORT_FROM = M.USERID) INNER JOIN BOARD_REPORT_CATEGORIES BRC
+		ON(RB.BOARD_REPORT_CATEGORY = BRC.BOARD_REPORT_CATEGORY) INNER JOIN BOARD B
+		ON(RB.REPORT_BOARD = B.BOARD_NUMBER) INNER JOIN MEMBER M2
+		ON(B.B_WRITER = M2.USERID)
+		WHERE REPORT_STATUS = 'W'
+		ORDER BY REPORT_NO DESC
+	</select>
+	
+	<!-- SELECT REPORT_BOARD -->
+	<select id="selectBoardReport" parameterType="_int" resultMap="reportBoardResultSet">
+		SELECT RB.*, BRC.BOARD_REPORT_CATEGORY_NAME, M.NICKNAME, B.BOARD_TITLE, B.B_WRITER, M2.NICKNAME AS "B_WRITER_NICKNAME"
+		FROM REPORT_BOARD RB INNER JOIN MEMBER M
+		ON(RB.REPORT_FROM = M.USERID) INNER JOIN BOARD_REPORT_CATEGORIES BRC
+		ON(RB.BOARD_REPORT_CATEGORY = BRC.BOARD_REPORT_CATEGORY) INNER JOIN BOARD B
+		ON(RB.REPORT_BOARD = B.BOARD_NUMBER) INNER JOIN MEMBER M2
+		ON(B.B_WRITER = M2.USERID)
+		WHERE REPORT_NO=#{report_no}
+	</select>
+	
+	<!-- 게시글 신고 검색 결과 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getSearchBoardReportListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT_BOARD
+		<if test="searchCondition != 'All'">
+			WHERE REPORT_STATUS=#{searchCondition}
+		</if>
+	</select>	
+	
+	<!-- SELECT REPORT_BOARD LIST 검색 -->
+	<select id="selectSearchBoardReportList" parameterType="_int" resultMap="reportBoardResultSet">
+		SELECT RB.*, BRC.BOARD_REPORT_CATEGORY_NAME, M.NICKNAME, B.BOARD_TITLE, B.B_WRITER, M2.NICKNAME AS "B_WRITER_NICKNAME"
+		FROM REPORT_BOARD RB INNER JOIN MEMBER M
+		ON(RB.REPORT_FROM = M.USERID) INNER JOIN BOARD_REPORT_CATEGORIES BRC
+		ON(RB.BOARD_REPORT_CATEGORY = BRC.BOARD_REPORT_CATEGORY) INNER JOIN BOARD B
+		ON(RB.REPORT_BOARD = B.BOARD_NUMBER) INNER JOIN MEMBER M2
+		ON(B.B_WRITER = M2.USERID)
+		<if test="searchCondition != 'All'">
+			WHERE REPORT_STATUS=#{searchCondition}
+		</if>
+		ORDER BY REPORT_NO DESC
+	</select>	
+	
+	<!-- 회원 신고 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getMemberReportListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT_MEMBER
+		WHERE REPORT_STATUS='W'
+	</select>	
+	
+	<!-- SELECT REPORT_MEMBER LIST -->
+	<select id="selectMemberReportList" parameterType="_int" resultMap="reportMemberResultSet">
+		SELECT RM.*, MRC.MEMBER_REPORT_CATEGORY_NAME, M.NICKNAME AS "REPORT_TO_NICKNAME", M2.NICKNAME AS "REPORT_FROM_NICKNAME"
+		FROM REPORT_MEMBER RM INNER JOIN MEMBER M
+		ON(RM.REPORT_TO = M.USERID) INNER JOIN MEMBER M2
+		ON(RM.REPORT_FROM = M2.USERID) INNER JOIN MEMBER_REPORT_CATEGORIES MRC
+		ON(RM.MEMBER_REPORT_CATEGORY = MRC.MEMBER_REPORT_CATEGORY)
+		WHERE REPORT_STATUS = 'W'
+		ORDER BY REPORT_NO DESC
+	</select>	
+	
+	<!-- SELECT REPORT_MEMBER -->
+	<select id="selectMemberReport" parameterType="_int" resultMap="reportMemberResultSet">
+		SELECT RM.*, MRC.MEMBER_REPORT_CATEGORY_NAME, M.NICKNAME AS "REPORT_TO_NICKNAME", M2.NICKNAME AS "REPORT_FROM_NICKNAME"
+		FROM REPORT_MEMBER RM INNER JOIN MEMBER M
+		ON(RM.REPORT_TO = M.USERID) INNER JOIN MEMBER M2
+		ON(RM.REPORT_FROM = M2.USERID) INNER JOIN MEMBER_REPORT_CATEGORIES MRC
+		ON(RM.MEMBER_REPORT_CATEGORY = MRC.MEMBER_REPORT_CATEGORY)
+		WHERE REPORT_NO=#{report_no}
+	</select>
+	
+	<!-- 회원 신고 검색 결과 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getSearchMemberReportListCount" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT_MEMBER
+		<if test="searchCondition != 'All'">
+			WHERE REPORT_STATUS=#{searchCondition}
+		</if>
+	</select>	
+	
+	<!-- SELECT REPORT_MEMBER LIST 검색 -->
+	<select id="selectSearchMemberReportList" parameterType="string" resultMap="reportMemberResultSet">
+		SELECT RM.*, MRC.MEMBER_REPORT_CATEGORY_NAME, M.NICKNAME AS "REPORT_TO_NICKNAME", M2.NICKNAME AS "REPORT_FROM_NICKNAME"
+		FROM REPORT_MEMBER RM INNER JOIN MEMBER M
+		ON(RM.REPORT_TO = M.USERID) INNER JOIN MEMBER M2
+		ON(RM.REPORT_FROM = M2.USERID) INNER JOIN MEMBER_REPORT_CATEGORIES MRC
+		ON(RM.MEMBER_REPORT_CATEGORY = MRC.MEMBER_REPORT_CATEGORY)
+		<if test="searchCondition != 'All'">
+			WHERE REPORT_STATUS=#{searchCondition}
+		</if>
+		ORDER BY REPORT_NO DESC
+	</select>	
+	
+	<!-- 전문가 등록 승인 글 목록 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getProApproveListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REGISTER_PRO
+		WHERE REGISTER_APPROVE='W'
+	</select>	
+	
+	<!-- SELECT REGISTER_PRO LIST -->
+	<select id="selectProApproveList" parameterType="_int" resultMap="registerProApproveResultSet">
+		SELECT RP.*, M.NICKNAME, M.PROFILE_PIC
+		FROM REGISTER_PRO RP INNER JOIN MEMBER M
+		ON(RP.REGISTER_USER = M.USERID)
+		WHERE REGISTER_APPROVE = 'W'
+		ORDER BY REGISTER_NO DESC
+	</select>
+	
+	<!-- SELECT REGISTER_PRO DETAIL -->
+	<select id="selectProApprove" parameterType="_int" resultMap="registerProApproveResultSet">
+		SELECT RP.*, M.NICKNAME, M.PROFILE_PIC
+		FROM REGISTER_PRO RP INNER JOIN MEMBER M
+		ON(RP.REGISTER_USER = M.USERID)
+		WHERE REGISTER_NO = #{register_no}
+	</select>
+	
+	<!-- 전문가 등록 승인 검색 결과 글 목록 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getSearchProApproveListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REGISTER_PRO
+		<if test="searchCondition != 'All'">
+			WHERE REGISTER_APPROVE=#{searchCondition}
+		</if>		
+	</select>	
+	
+	<!-- SELECT REGISTER_PRO LIST 검색 -->
+	<select id="selectSearchProApproveList" parameterType="_int" resultMap="registerProApproveResultSet">
+		SELECT RP.*, M.NICKNAME, M.PROFILE_PIC
+		FROM REGISTER_PRO RP INNER JOIN MEMBER M
+		ON(RP.REGISTER_USER = M.USERID)
+		<if test="searchCondition != 'All'">
+			WHERE REGISTER_APPROVE = #{searchCondition}
+		</if>		
+		ORDER BY REGISTER_NO DESC
+	</select>
+	
+	<!-- 게시글 등록 승인 글 목록 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getBoardApproveListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD
+		WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='W' AND ((BOARD_CATEGORY = 2 AND SEARCH_TYPE = 'FS') OR BOARD_CATEGORY = 3)
+	</select>	
+	
+	<!-- SELECT BOARD(BOARD_APPROVE) LIST -->
+	<!-- 카테고리 찾아요(찾아요 구분 = 학생 찾아요), 컬럼 -->
+	<select id="selectBoardApproveList" parameterType="_int" resultMap="boardApproveResultSet">
+		SELECT B.*, BC.BOARD_CATEGORY_NAME, M.NICKNAME, M.PROFILE_PIC
+		FROM BOARD B INNER JOIN MEMBER M
+		ON(B.B_WRITER = M.USERID) INNER JOIN BOARD_CATEGORIES BC
+		ON(B.BOARD_CATEGORY = BC.BOARD_CATEGORY)
+		WHERE BOARD_ENABLED = '1' AND BOARD_APPROVE = 'W' AND ((B.BOARD_CATEGORY = 2 AND SEARCH_TYPE = 'FS') OR B.BOARD_CATEGORY = 3)
+		ORDER BY BOARD_NUMBER DESC
+	</select>
+	
+	<!-- SELECT BOARD(BOARD_APPROVE) DETAIL -->
+	<select id="selectBoardApprove" parameterType="_int" resultMap="boardApproveResultSet">
+		SELECT B.*, BC.BOARD_CATEGORY_NAME, M.NICKNAME, M.PROFILE_PIC
+		FROM BOARD B INNER JOIN MEMBER M
+		ON(B.B_WRITER = M.USERID) INNER JOIN BOARD_CATEGORIES BC
+		ON(B.BOARD_CATEGORY = BC.BOARD_CATEGORY)
+		WHERE BOARD_NUMBER=#{board_number} AND BOARD_ENABLED = '1' AND ((B.BOARD_CATEGORY = 2 AND SEARCH_TYPE = 'FS') OR B.BOARD_CATEGORY = 3)
+	</select>	
+	
+	<!-- 게시글 등록 승인 검색 결과 글 목록 페이징 처리를 위한 글 갯수 구하기 -->
+	<select id="getSearchBoardApproveListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD
+		WHERE BOARD_ENABLED='1' AND ((BOARD_CATEGORY = 2 AND SEARCH_TYPE = 'FS') OR BOARD_CATEGORY = 3)
+		<if test="searchCondition != 'All'">
+			AND BOARD_APPROVE=#{searchCondition}
+		</if>
+	</select>	
+	
+	<!-- SELECT BOARD(BOARD_APPROVE) LIST 검색 -->
+	<select id="selectSearchBoardApproveList" parameterType="_int" resultMap="boardApproveResultSet">
+		SELECT B.*, BC.BOARD_CATEGORY_NAME, M.NICKNAME, M.PROFILE_PIC
+		FROM BOARD B INNER JOIN MEMBER M
+		ON(B.B_WRITER = M.USERID) INNER JOIN BOARD_CATEGORIES BC
+		ON(B.BOARD_CATEGORY = BC.BOARD_CATEGORY)
+		WHERE BOARD_ENABLED='1' AND ((B.BOARD_CATEGORY = 2 AND SEARCH_TYPE = 'FS') OR B.BOARD_CATEGORY = 3)
+		<if test="searchCondition != 'All'">
+			AND BOARD_APPROVE = #{searchCondition}
+		</if>
+		ORDER BY BOARD_NUMBER DESC
+	</select>	
+	
+	<!-- UPDATE REPORT_MEMBER STATUS YES -->
+	<update id="updateMemberReportYes" parameterType="_int">
+		UPDATE REPORT_MEMBER SET REPORT_STATUS = 'Y'
+		WHERE REPORT_NO = #{report_no}
+	</update>
+	
+	<!-- UPDATE REPORT_MEMBER COUNT -->
+	<update id="updateMemberReportCount" parameterType="string">
+		UPDATE MEMBER SET REPORT_COUNT = REPORT_COUNT+1
+		WHERE USERID = #{report_member}
+	</update>
+	
+	<!-- UPDATE REPORT_MEMBER STATUS NO -->
+	<update id="updateMemberReportNo" parameterType="_int">
+		UPDATE REPORT_MEMBER SET REPORT_STATUS = 'N'
+		WHERE REPORT_NO = #{report_no}
+	</update>	
+
+	<!-- UPDATE REPORT_BOARD STATUS YES -->
+	<update id="updateBoardReportYes" parameterType="_int">
+		UPDATE REPORT_BOARD SET REPORT_STATUS = 'Y'
+		WHERE REPORT_NO = #{report_no}
+	</update>
+	
+	<!-- UPDATE REPORT_BOARD COUNT -->
+	<update id="updateBoardReportCount" parameterType="_int">
+		UPDATE BOARD SET REPORT_COUNT = REPORT_COUNT+1
+		WHERE BOARD_NUMBER = #{board_number}
+	</update>
+	
+	<!-- UPDATE REPORT_BOARD STATUS NO -->
+	<update id="updateBoardReportNo" parameterType="_int">
+		UPDATE REPORT_BOARD SET REPORT_STATUS = 'N'
+		WHERE REPORT_NO = #{report_no}
+	</update>	
+	
+	<!-- UPDATE REGISTER_PRO APPROVE YES -->
+	<update id="updateProApproveYes" parameterType="_int">
+		UPDATE REGISTER_PRO SET REGISTER_APPROVE = 'Y'
+		WHERE REGISTER_NO = #{register_no}
+	</update>
+	
+	<!-- UPDATE REGISTER_PRO MEMBER STATUS YES -->
+	<update id="updateProApproveStatusYes" parameterType="string">
+		UPDATE MEMBER SET PRO_APPROVE = 'Y', AUTHORITY = '2'
+		WHERE USERID = #{register_user}
+	</update>
+
+	<!-- UPDATE REGISTER_PRO APPROVE NO -->
+	<update id="updateProApproveNo" parameterType="_int">
+		UPDATE REGISTER_PRO SET REGISTER_APPROVE = 'N'
+		WHERE REGISTER_NO = #{register_no}
+	</update>
+
+	<!-- UPDATE REGISTER_PRO MEMBER STATUS NO -->
+	<update id="updateProApproveStatusNo" parameterType="string">
+		UPDATE MEMBER SET PRO_APPROVE = 'N', AUTHORITY = '1'
+		WHERE USERID = #{register_user}
+	</update>
+
+	<!-- UPDATE BOARD APPROVE YES -->
+	<update id="updateBoardApproveYes" parameterType="_int">
+		UPDATE BOARD SET BOARD_APPROVE = 'Y'
+		WHERE BOARD_NUMBER = #{board_number}
+	</update>
+	
+	<!-- UPDATE BOARD APPROVE NO -->
+	<update id="updateBoardApproveNo" parameterType="_int">
+		UPDATE BOARD SET BOARD_APPROVE = 'N'
+		WHERE BOARD_NUMBER = #{board_number}
+	</update>
+	
+		
+</mapper>

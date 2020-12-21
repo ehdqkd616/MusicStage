@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+ 	</settings>
+ 	
+ 	<typeAliases>
+ 	
+ 		<typeAlias type="com.musicstage.spring.member.model.vo.Member" alias="Member"/>
+		<typeAlias type="com.musicstage.spring.member.model.vo.Interest" alias="Interest"/>
+		<typeAlias type="com.musicstage.spring.member.model.vo.register_Pro" alias="register"/>
+		<typeAlias type="com.musicstage.spring.member.model.vo.register_file" alias="registerfile"/>
+		<typeAlias type="com.musicstage.spring.member.model.vo.Follow" alias="Follow"/>			
+ 	
+ 		<typeAlias type="com.musicstage.spring.board.model.vo.Board" alias="Board"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.BoardFile" alias="BoardFile"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.FileType" alias="FileType"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.Reply" alias="Reply"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.ReportBoard" alias="ReportBoard"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.SaveBoard" alias="SaveBoard"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.BoardCategories" alias="BoardCategories"/>
+		<typeAlias type="com.musicstage.spring.board.model.vo.LikeBoard" alias="LikeBoard"/>		
+		
+		<typeAlias type="com.musicstage.spring.member.model.vo.RegisterPro" alias="RegisterPro"/>		
+		<typeAlias type="com.musicstage.spring.common.model.vo.BoardApprove" alias="BoardApprove"/>				
+ 		<typeAlias type="com.musicstage.spring.common.model.vo.ETCBoard" alias="ETCBoard" />
+		<typeAlias type="com.musicstage.spring.common.model.vo.ReportBoard" alias="ReportBoard2"/>
+		<typeAlias type="com.musicstage.spring.common.model.vo.ReportMember" alias="ReportMember"/>
+ 		<typeAlias type="com.musicstage.spring.common.model.vo.ETCBoardReply" alias="ETCBoardReply" /> 	 		
+		
+		<typeAlias type="com.musicstage.spring.common.model.vo.Alarm" alias="Alarm"/>
+		
+ 		<typeAlias type="com.musicstage.spring.chatting.model.vo.ChattingRoom" alias="ChattingRoom" />
+ 		<typeAlias type="com.musicstage.spring.chatting.model.vo.JoinRoom" alias="JoinRoom" /> 	
+ 		<typeAlias type="com.musicstage.spring.chatting.model.vo.Message" alias="Message" /> 	
+		
+		<typeAlias type="com.musicstage.spring.friendselect.vo.selecVo" alias="selecVo"/>
+		<typeAlias type="com.musicstage.spring.friendselect.vo.upda" alias="UserM"/>		
+		
+		
+ 	</typeAliases>
+ 	
+ 	<mappers>
+ 		<mapper resource="mapper/member-mapper.xml" />
+		<mapper resource="mapper/friend-mapper.xml"/>
+ 		<mapper resource="mapper/board-mapper.xml" />
+ 		<mapper resource="mapper/chatting-mapper.xml" />
+ 		<mapper resource="mapper/admin-mapper.xml" />
+ 		<mapper resource="mapper/ws-mapper.xml" />
+ 	</mappers>
+ 	
+</configuration>

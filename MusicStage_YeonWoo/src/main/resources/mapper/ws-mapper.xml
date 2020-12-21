@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- namespace : 연결하고 싶은 mapper를 구분하는 속성 -->
+<!-- mybatis-config.xml에서 mapper 등록 -->
+<mapper namespace="wsMapper">
+
+
+	<!-- ALARM ResultSet -->
+	<resultMap type="Alarm" id="alarmResultSet">
+		<id property="alarm_no" column="ALARM_NO" />			
+		<result property="alarm_title" column="ALARM_TITLE" />
+		<result property="alarm_content" column="ALARM_CONTENT" />
+		<result property="alarm_type" column="ALARM_TYPE" />
+		<result property="alarm_isRead" column="ALARM_ISREAD" />
+		<result property="alarm_url" column="ALARM_URL" />
+		<result property="alarm_sender" column="ALARM_SENDER" />	
+		<result property="alarm_sender_nickName" column="ALARM_SENDER_NICKNAME" />	
+		<result property="alarm_sender_profile_pic" column="ALARM_SENDER_PROFILE_PIC" />	
+		<result property="alarm_receiver" column="ALARM_RECEIVER" />	
+		<result property="alarm_receiver_nickName" column="ALARM_RECEIVER_NICKNAME" />	
+		<result property="alarm_receiver_profile_pic" column="ALARM_RECEIVER_PROFILE_PIC" />	
+		<result property="board_no" column="BOARD_NO" />
+		<result property="board_file_path" column="BOARD_FILE_PATH" />
+		<result property="board_file_change_name" column="BOARD_FILE_CHANGE_NAME" />
+		<result property="reply_no" column="REPLY_NO" />
+		<result property="etc_board_no" column="ETC_BOARD_NO" />
+		<result property="register_no" column="REGISTER_NO" />
+		<result property="m_report_no" column="M_REPORT_NO" />
+		<result property="b_report_no" column="B_REPORT_NO" />
+	</resultMap>	
+
+	<select id="countUnReadAlarm" parameterType="string" resultType="_int">
+		SELECT COUNT(*) 
+		FROM ALARM
+		WHERE ALARM_RECEIVER = #{userId} AND ALARM_ISREAD = '0'
+	</select>
+
+	<select id="countTotalAlarm" parameterType="string" resultType="_int">
+		SELECT COUNT(*) 
+		FROM ALARM
+		WHERE ALARM_RECEIVER = #{userId}
+	</select>
+	
+	<select id="countSystemAlarm" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM ALARM
+		WHERE ALARM_TYPE = 'Notice' OR (ALARM_RECEIVER = #{userId} AND ALARM_TYPE IN ('RegisterYes', 'RegisterNo', 'BoardReportYes', 'BoardReportNo', 'MemberReportYes', 'MemberReportNo'))
+	</select>
+	
+	<select id="countSocialAlarm" parameterType="string" resultType="_int">
+		SELECT COUNT(*) 
+		FROM ALARM
+		WHERE ALARM_RECEIVER = #{userId} AND ALARM_TYPE IN ('Follow', 'Like', 'BoardReply', 'ReplyReply')
+	</select>
+	
+	<select id="selectAlarmList" parameterType="string" resultMap="alarmResultSet">
+		SELECT A.*, M1.NICKNAME AS "ALARM_SENDER_NICKNAME", M1.PROFILE_PIC AS "ALARM_SENDER_PROFILE_PIC", 
+		M2.NICKNAME AS "ALARM_RECEIVER_NICKNAME", M2.PROFILE_PIC AS "ALARM_RECEIVER_PROFILE_PIC", 
+		BF.FILE_PATH AS "BOARD_FILE_PATH", BF.FILE_CHANGE_NAME AS "BOARD_FILE_CHANGE_NAME"
+		FROM ALARM A LEFT OUTER JOIN MEMBER M1
+		ON(A.ALARM_SENDER = M1.USERID) LEFT OUTER JOIN MEMBER M2
+		ON(A.ALARM_RECEIVER = M2.USERID) LEFT OUTER JOIN BOARD_FILE BF
+		ON(A.BOARD_NO = BF.BOARD_NUMBER AND BF.FILE_THUMBNAIL='1')
+		WHERE ALARM_RECEIVER = #{userId}
+		ORDER BY ALARM_NO DESC
+	</select>
+	
+	<select id="selectSystemAlarmList" parameterType="string" resultMap="alarmResultSet">
+		SELECT A.*, M1.NICKNAME AS "ALARM_SENDER_NICKNAME", M1.PROFILE_PIC AS "ALARM_SENDER_PROFILE_PIC", 
+		M2.NICKNAME AS "ALARM_RECEIVER_NICKNAME", M2.PROFILE_PIC AS "ALARM_RECEIVER_PROFILE_PIC", 
+		BF.FILE_PATH AS "BOARD_FILE_PATH", BF.FILE_CHANGE_NAME AS "BOARD_FILE_CHANGE_NAME"
+		FROM ALARM A LEFT OUTER JOIN MEMBER M1
+		ON(A.ALARM_SENDER = M1.USERID) LEFT OUTER JOIN MEMBER M2
+		ON(A.ALARM_RECEIVER = M2.USERID) LEFT OUTER JOIN BOARD_FILE BF
+		ON(A.BOARD_NO = BF.BOARD_NUMBER AND BF.FILE_THUMBNAIL='1')
+		WHERE (ALARM_RECEIVER = #{userId} AND ALARM_TYPE IN ('RegisterYes', 'RegisterNo', 'BoardReportYes', 'BoardReportNo', 
+		'MemberReportYes', 'MemberReportNo', 'BoardApproveYes', 'BoardApproveNo')) OR ALARM_TYPE = 'Notice' 
+		ORDER BY ALARM_NO DESC
+	</select>
+	
+	<select id="selectSocialAlarmList" parameterType="string" resultMap="alarmResultSet">
+		SELECT A.*, M1.NICKNAME AS "ALARM_SENDER_NICKNAME", M1.PROFILE_PIC AS "ALARM_SENDER_PROFILE_PIC", 
+		M2.NICKNAME AS "ALARM_RECEIVER_NICKNAME", M2.PROFILE_PIC AS "ALARM_RECEIVER_PROFILE_PIC", 
+		BF.FILE_PATH AS "BOARD_FILE_PATH", BF.FILE_CHANGE_NAME AS "BOARD_FILE_CHANGE_NAME" 
+		FROM ALARM A LEFT OUTER JOIN MEMBER M1 
+		ON(A.ALARM_SENDER = M1.USERID) LEFT OUTER JOIN MEMBER M2 
+		ON(A.ALARM_RECEIVER = M2.USERID) LEFT OUTER JOIN BOARD_FILE BF 
+		ON(A.BOARD_NO = BF.BOARD_NUMBER AND BF.FILE_THUMBNAIL='1') 
+		WHERE ALARM_RECEIVER = #{userId} AND ALARM_TYPE IN ('Follow', 'Like', 'BoardReply', 'ReplyReply') 
+		ORDER BY ALARM_NO DESC
+	</select>		
+	
+	
+	<update id="checkReadAllAlarm" parameterType="string">
+		UPDATE ALARM SET ALARM_ISREAD = '1' 
+		WHERE ALARM_RECEIVER = #{userId}	
+	</update>
+	
+	<update id="checkReadAlarm" parameterType="Map">
+		UPDATE ALARM SET ALARM_ISREAD = '1' 
+		WHERE ALARM_RECEIVER = #{userId} AND ALARM_NO = #{alarm_no}
+	</update>	
+	
+	<insert id="saveFollowAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'Follow', SYSTIMESTAMP, '0', 'goYouStage.st', #{alarm_sender}, #{alarm_receiver})
+	</insert>
+	
+	<insert id="saveBoardAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'BoardReply', SYSTIMESTAMP, '0', 'bDetail.bo', #{alarm_sender}, #{alarm_receiver}, #{board_no})
+	</insert>
+
+	<insert id="saveReplyAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO, REPLY_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'ReplyReply', SYSTIMESTAMP, '0', 'bDetail.bo', #{alarm_sender}, #{alarm_receiver}, #{board_no}, #{reply_no})
+	</insert>
+	
+	<insert id="saveLikeAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'Like', SYSTIMESTAMP, '0', 'bDetail.bo', #{alarm_sender}, #{alarm_receiver}, #{board_no})
+	</insert>	
+	
+	<insert id="saveNoticeAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ETC_BOARD_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'Notice', SYSTIMESTAMP, '1', 'alarmDetail.ws', #{alarm_sender}, EB_SEQ.CURRVAL)
+	</insert>
+	
+	<insert id="saveRegisterYesAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, REGISTER_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'RegisterYes', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{register_no})
+	</insert>
+	
+	<insert id="saveRegisterNoAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, REGISTER_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'RegisterNo', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{register_no})
+	</insert>
+	
+	<insert id="saveMemberReportYesAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, M_REPORT_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'MemberReportYes', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{m_report_no})
+	</insert>
+	
+	<insert id="saveMemberReportNoAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, M_REPORT_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'MemberReportNo', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{m_report_no})
+	</insert>	
+	
+	<insert id="saveBoardReportYesAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO , B_REPORT_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'BoardReportYes', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{alarm_board_no}, #{b_report_no})
+	</insert>
+
+	<insert id="saveBoardReportNoAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO, B_REPORT_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'BoardReportNo', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{alarm_board_no}, #{b_report_no})
+	</insert>
+	
+	<insert id="saveBoardApproveYesAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, 'BoardApproveYes', SYSTIMESTAMP, '0', 'bDetail.bo', #{alarm_sender}, #{alarm_receiver}, #{board_no})
+	</insert>
+	
+	<insert id="saveBoardApproveNoAlarm" parameterType="Map">
+		INSERT INTO ALARM (ALARM_NO, ALARM_TITLE, ALARM_CONTENT, ALARM_TYPE, ALARM_DATE, ALARM_ISREAD, ALARM_URL, ALARM_SENDER, ALARM_RECEIVER, BOARD_NO)
+		VALUES (A_SEQ.NEXTVAL, #{alarm_title}, #{alarm_content}, 'BoardApproveNo', SYSTIMESTAMP, '0', 'alarmDetail.ws', #{alarm_sender}, #{alarm_receiver}, #{board_no})
+	</insert>
+	
+	<select id="selectAlarm" parameterType="_int" resultMap="alarmResultSet">
+		SELECT A.*, M1.NICKNAME AS "ALARM_SENDER_NICKNAME", M1.PROFILE_PIC AS "ALARM_SENDER_PROFILE_PIC", 
+		M2.NICKNAME AS "ALARM_RECEIVER_NICKNAME", M2.PROFILE_PIC AS "ALARM_RECEIVER_PROFILE_PIC", 
+		BF.FILE_PATH AS "BOARD_FILE_PATH", BF.FILE_CHANGE_NAME AS "BOARD_FILE_CHANGE_NAME"
+		FROM ALARM A LEFT OUTER JOIN MEMBER M1
+		ON(A.ALARM_SENDER = M1.USERID) LEFT OUTER JOIN MEMBER M2
+		ON(A.ALARM_RECEIVER = M2.USERID) LEFT OUTER JOIN BOARD_FILE BF
+		ON(A.BOARD_NO = BF.BOARD_NUMBER AND BF.FILE_THUMBNAIL='1')
+		WHERE ALARM_NO = #{alarm_no}
+<!-- 		WHERE ALARM_NO = #{alarm_no} AND ALARM_RECEIVER = #{userId} -->
+	</select>	
+
+	<delete id="deleteAlarm" parameterType="Map">
+		DELETE FROM ALARM 
+		WHERE ALARM_TYPE = #{alarm_type} AND ALARM_SENDER = #{alarm_sender} AND ALARM_RECEIVER = #{alarm_receiver} 
+		AND (BOARD_NO = #{board_no} OR REPLY_NO = #{reply_no} OR ETC_BOARD_NO = #{etc_board_no} OR REGISTER_NO = #{register_no} OR M_REPORT_NO = #{m_report_no} OR B_REPORT_NO = #{b_report_no})
+	</delete>
+		
+	<delete id="deleteFollowAlarm" parameterType="Map">
+		DELETE FROM ALARM 
+		WHERE ALARM_TYPE = #{alarm_type} AND ALARM_SENDER = #{alarm_sender} AND ALARM_RECEIVER = #{alarm_receiver} 
+<!-- 		AND BOARD_NO = null AND REPLY_NO = null AND ETC_BOARD_NO = null AND REGISTER_NO = null AND M_REPORT_NO = null AND B_REPORT_NO = null -->
+	</delete>	
+	
+</mapper>

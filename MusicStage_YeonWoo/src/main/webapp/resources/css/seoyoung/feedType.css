@@ -1,0 +1,266 @@
+@charset "UTF-8";
+/* bxslider */
+.bx-wrapper { margin: 0; border: 0; box-shadow: none; }
+/* bxslider에서 양옆 화살표 */
+.bx-controls-direction a { z-index: 0 !important; }
+
+body {
+	font-family: 'Nanum Gothic', sans-serif;
+	background: #FAFAFA !important;
+}
+
+header {
+	z-index: 1;
+	height: 50px;
+	position: fixed;
+}
+
+#centerWrap {
+	margin: auto; 
+	width: 940px;
+}
+
+#left_div {
+	display: inline-block;
+	width: 50%;
+	height: 500px;
+	float: left;
+}
+
+#center_div {
+	position: relative;
+	top: 150px;
+	height: 300px;
+	margin: 0 20px;
+}
+
+#quick_menu {
+	display: flex;
+	font-size: 0;
+	padding: 0;
+	margin: 20px auto;
+}
+
+#quick_menu li {
+	display: inline-block;
+	width: 25%;
+	font-size: 12px;
+	list-style: none;
+	text-align: center;
+}
+
+#quick_menu img {
+	max-width: 80%;
+	max-height: 50%;
+}
+
+#right_div {
+	display: inline-block;
+	width: 50%;
+	height: 500px;
+	float: left;
+}
+
+#main_img {
+	height: 100%;
+	object-fit: cover;
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	opacity: 0.2;
+	max-width: -webkit-fill-available;
+	max-height: 100%;
+}
+
+#slide_menu {
+	display: inline-block;
+	width: 100%;
+	height: 350px;
+	border: 1px solid brown;
+	margin-top: 20px;
+}
+
+.section {
+	width: 100%;
+	height: 100vh;
+	margin-top: 50px;
+	z-index: 1;
+}
+
+/* 여기서부터 서영. */
+.main_div { margin: 0 auto; width: 600px; }
+
+/* 하나의 피드. */
+.main_feed_table { width: 600px; height: 900px; /* ?어떻게 해야하지? auto? */
+				   border-spacing: 0px; border: 1px solid #DBDBDB; background: white; }
+
+/* 프로필 사진, 닉네임 td */
+.feedType_profile_td { padding: 15px; border-bottom: 1px solid #DBDBDB; }
+.feedType_profile_td img { vertical-align: middle; /* 프로필사진, 닉네임 세로 가운데 정렬. table이랑 td에는 안먹히고 여기에만 먹힘. 이해x */
+						   width: 45px; height: 45px; border-radius: 50px; }
+.feedType_profile_td button { float: right; border: none; outline: none; background:transparent; cursor: pointer;
+							  font-size: 30px; font-weight: bold; margin: auto; height: 45px; color: black; }
+.nickname_link { text-decoration: none; color: black; font-weight: bold; font-size: 20px; }
+
+/* 이미지 td (슬라이더) */
+.feedType_img_td { height: 600px; }
+.feedType_img_td img { width: 100%;}
+.feedType_img_td video { width: 100%; }
+
+.list_video { height: 600px; background: black; }
+.list_music { width: 600px; height: 600px; }
+
+/* 좋아요 ~ 보관함 ~ 좋아요 수 */
+.feedType_icon_td { color: #4B4B4B; font-size: 14px; padding: 15px 15px 5px 15px; }
+.feedType_icon { width: 30px; height: 30px; }
+.keep_btn { float: right; }
+/* #feedType_keep, #feedType_unkeep{ float: right; 아이콘 오른쪽 정렬 } */
+.feedType_icon_td button { border: none; outline: none; background:transparent; cursor: pointer; }
+
+/* 글내용 td */
+.feedType_content_td { padding: 5px 15px 5px 15px; }
+.feedType_title_div { font-weight: 700; font-size: 20pt; }
+.feedType_title_div span { color: black; }
+.feedType_content_div {	font-size: 14px; color: black; width: 566px; padding-top: 10px;
+						/* 여러줄 ... 처리 start */
+						/* white-space: normal;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						line-height: 20px; height: 70px;
+						display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; */
+						/* end */
+						/* 한줄 ... 처리 start*/
+			 	  		width: 500px;
+				   		overflow: hidden;
+				   		/* white-space: nowrap; */
+				   		/* end */
+						}
+
+/* 댓글 td */
+.feedType_comment_td { padding: 5px 15px 15px 15px; border-bottom: 1px solid #DBDBDB; }
+
+/* 댓글 더보기 */
+.feedType_comment_plus { color: #4B4B4B; font-size: 14px; padding-bottom: 10px; }
+.feedType_comment_plus a { color: black; text-decoration: none; }
+
+/* 댓글 table로 바꾸고 css 수정(12/2) */
+.fd_parent_comment_box { color: black; font-size: 14px; }
+.fd_parent_comment_box tr { display: flex; width: 570px; }
+.fd_comment_writer { font-weight: 650; flex-shrink: 0; }
+.fd_comment_content { padding-left: 10px;}
+.fd_comment_content_div{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; width: 430px;
+   						 margin-right: 10px; }
+				   
+/* 댓글 달기 td */
+.feedType_comment_input_td { height: 40px;}
+.feedType_comment_input_td input[type="text"] { border: none; outline: none; width: 555px; padding: 0px; }
+.feedType_comment_input_td input[type="submit"] { margin-right: 5px; border: none; background: none; outline: none;
+												  cursor: pointer; font-weight: bolder !important; color: #A7543A; }
+
+/* 1. ···버튼 눌렀을 때 나오는 모달 start */
+#modal1, #modal2 {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.5);
+}
+
+/* 4개일 때 css */
+/* #plus_list { background-color: white; margin: 15% auto; border: none; width: 400px; height: 205px;
+			 text-align: center; border: 1px solid #DBDBDB; border-radius: 10px; background: white; }
+#plus_list button { border: none; outline: none; background:transparent; cursor: pointer; width: 400px; height: 50px; } */
+
+/* 3개일 때 css */
+#my_plus_list {
+	background-color: white;
+	margin: 20% auto;
+    border: none;
+    width: 400px; /* Could be more or less, depending on screen size */
+	height: 155px;
+	text-align: center;
+	border: 1px solid #DBDBDB;
+	border-radius: 10px;
+	background: white;
+}
+
+#my_plus_list button {
+	border: none;
+	outline: none;
+	background:transparent;
+	cursor: pointer;
+	width: 400px;
+	height: 50px;
+}
+
+/* slide test start */
+/* //////////////// */
+/* 사용o >> 썸네일 + 파일들일경우 */
+.feedType_img_td .sliderImages {
+	position:absolute;
+    max-width:100%;
+    margin:auto;
+    top:0; bottom:0; left:0; right:0;
+}
+
+/* 사용o >> 썸네일만 있을경우  */
+.feedType_img_td .onlyThumbnail{
+    max-width: 100%;
+    margin: auto;
+    display:flex; align-items:center;
+}
+
+/* recommend test start */
+/* //////////////////// */
+.recommend_main_div {
+	margin: 30px 420px; /* margin: 0 auto 약간 삐뚤해서 야매로 맞춤 ... */
+	border: 1px solid #DBDBDB;
+	/* margin: 0 auto; */
+	width: 600px;
+	height: 100px;
+	padding: 15px;
+	background: white;
+}
+/* ////////////////// */
+/* recommend test end */
+
+/* 신고하기 모달 start */
+   #n_area{ width: 700px; height: 400px; border-radius: 15px !important; padding: 15px;}
+   #n_letter{ text-align: left; font-size: 14px; font-weight: bolder; padding-left: 15px; margin-bottom: 20px;}
+   #n_select{ border-radius: 5px; border: 2px solid #DBDBDB;}
+   #n_text{ width: 640px; height: 270px; border: 2px solid #DBDBDB; resize: none;}
+   #n_notify{ width: 80px; height: 30px; border-radius: 6px; border: none; background: #521110; color: white;}
+   #n_cancel{ width: 50px; height: 30px; border-radius: 6px; border: none; background: gray; color: white;}
+
+.n_button { margin: 15px;}
+/* modal test */
+/* ////////// */
+#report_modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.5);
+}
+
+#n_area {
+	background-color: white;
+	margin: 12% auto;
+    border: none;
+    /* width: 400px; */ /* Could be more or less, depending on screen size */
+	/* height: 205px; */
+	text-align: center;
+	border: 1px solid #DBDBDB;
+	border-radius: 10px;
+	background: white;
+}
+/* 신고하기 모달 end */

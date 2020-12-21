@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:beans="http://www.springframework.org/schema/beans"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+      http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- annotation사용해서 객체생성 -->
+	<mvc:annotation-driven/>
+	
+	<mvc:resources mapping="/reources/**" location="/resources" />
+	
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/board/"/>
+		<beans:property name="suffix" value=".jsp"/>
+	</beans:bean>
+	
+	<context:component-scan base-package="com.musicstage.spring"/>
+
+	<!-- LoginInterceptor -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/*.me"/>
+			<mapping path="/*.st"/>
+			<mapping path="/*.bo"/>
+			<mapping path="/*.ad"/>
+			<mapping path="/*.ws"/>
+			<mapping path="/*.ct"/>
+
+			<!-- 로그인 안했을때 이용 가능한 기능 -->
+			<exclude-mapping path="/login.me"/>
+			<exclude-mapping path="/join1.me"/>
+			<exclude-mapping path="/join2.me"/>
+			<exclude-mapping path="/isExistID.me"/>
+			<exclude-mapping path="/address.me"/>
+			<exclude-mapping path="/api/join.me"/>
+			<exclude-mapping path="/join3.me"/>
+			<exclude-mapping path="/insertMember.me"/>
+			<exclude-mapping path="/join4.me"/>
+			<exclude-mapping path="/regiFinal.me"/>
+			<exclude-mapping path="/callback.me"/>
+			<exclude-mapping path="/isExistNickName.st"/>
+			
+			<exclude-mapping path="/socialFeed.bo"/>
+			<exclude-mapping path="/findFeed.bo"/>
+			<exclude-mapping path="/columnFeed.bo"/>
+			<exclude-mapping path="/reviewFeed.bo"/>
+			<exclude-mapping path="/search.bo"/>
+			<exclude-mapping path="/searchType.bo"/>
+			
+			<beans:bean id="loginInterceptor" class="com.musicstage.spring.common.interceptor.LoginInterceptor" />
+		</interceptor>
+	</interceptors>	
+</beans:beans>

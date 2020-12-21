@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="memberMapper">
+	<select id="memberLogin" resultMap="memberResultSet">
+		select *
+		from member
+		where userId = #{userId}
+			and enabled = '1'
+	</select>
+	
+	<select id="getProInfoShow" resultMap="registerSet">
+		select *
+		from register_pro
+		where REGISTER_USER = #{userId}
+	</select>
+	
+	<resultMap type="Member" id="memberResultSet">
+		<id column="USERID" property="userId" />
+		<result column="PASSWORD" property="password" />
+		<result column="NICKNAME" property="nickName" />
+		<result column="USERNAME" property="userName" />
+		<result column="BIRTHDAY" property="birthDay" />
+		<result column="GENDER" property="gender" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE" property="phone" />
+		<result column="ADDRESS" property="address" />
+		<result column="URL_ADDRESS" property="url_address" />
+		<result column="ENABLED" property="enabled" />
+		<result column="REPORT_COUNT" property="report_count" />
+		<result column="PROFILE_PIC" property="profile_pic" />
+		<result column="JOIN_DATE" property="join_date" />
+		<result column="FOLLOWER_COUNT" property="follower_count" />
+		<result column="FOLLOWING_COUNT" property="following_count" />
+		<result column="INTRODUCE" property="introduce" />
+		<result column="PRO_APPROVE" property="pro_approve" />
+		<result column="AUTHORITY" property="authority" />
+		<!-- <result column="AUTHORITY" property="authority" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/> -->
+	</resultMap>
+	
+	<insert id="insertMember">
+		insert into Member
+		values (#{userId}, #{password}, #{nickName}, #{userName}, #{birthDay}, #{gender}, #{email}, #{phone}, #{address}, #{url_address}, default, default, null, sysdate, default, default, null, default, ${authority})
+	</insert>
+	
+	<select id="isExistMember" parameterType="java.util.HashMap" resultType="_int">
+		select count(*)
+		from member
+		<where>
+			<if test="value != null and keyword.equals('userId')">
+				and userId = #{value}
+			</if>
+			<if test="value != null and keyword.equals('nickName')">
+				and nickName = #{value}
+			</if>
+			<if test="value != null and keyword.equals('email')">
+				and email = #{value}
+			</if>
+		</where>
+	</select>
+		
+	<insert id="insertInterest" parameterType="java.util.HashMap">
+		insert into LIKE_INTERESTS_MANAGEMENT values ((select LIKE_INTEREST from LIKE_INTERESTS where LIKE_INTEREST_NAME = #{interestName}), #{userId})
+	</insert>
+	
+	<update id="uploadImg">
+		update member
+		set profile_pic = #{profile_pic}
+		where userId = #{userId}
+	</update>
+	
+	<update id="updateMember">
+		update member
+		set nickName = #{nickName}, email = #{email}, phone = #{phone}, address = #{address}, url_address = #{url_address}, introduce = #{introduce}
+		where userId = #{userId}
+	</update>
+	
+	<update id="updatePwd">
+		update member
+		set password = #{password}
+		where userId = #{userId}
+	</update>
+	
+	<!-- <select id="createInterestView" parameterType="java.util.HashMap">
+		${sql}
+	</select>
+	
+	<update id="updateInterest" parameterType="java.util.HashMap">
+		update like_interests_view_${userId}
+		set LIKE_INTEREST_NAME = #{interestName}
+		where LIKE_INTEREST_USER = #{userId} and RNUM = ${rnum}
+	</update>
+	
+	<select id="dropInterestView" parameterType="java.util.HashMap">
+		${sql}
+	</select> -->
+	
+	<select id="lookupInterest" resultMap="InterestResultSet">
+		select LIKE_INTEREST, LIKE_INTEREST_NAME, LIKE_INTEREST_USER
+		from like_interests_management
+			JOIN like_interests USING(LIKE_INTEREST)
+		WHERE LIKE_INTEREST_USER = #{userId}
+	</select>
+	
+	<resultMap type="Interest" id="InterestResultSet">
+		<result column="LIKE_INTEREST" property="like_interest" />
+		<result column="LIKE_INTEREST_NAME" property="like_interest_name" />
+	</resultMap>
+	
+	<update id="updateInterest">
+		update like_interests_management
+		set LIKE_INTEREST = ${newest}
+		where LIKE_INTEREST = ${origin} and LIKE_INTEREST_USER = #{userId}
+	</update>
+	
+	<update id="deleteMember">
+		update member
+		set ENABLED = '9'
+		where userId = #{userId}
+	</update>
+	
+	<select id="getFollowing" resultMap="memberResultSet" parameterType="java.util.HashMap">
+		<![CDATA[
+			select RNUM, USERID, NICKNAME, PROFILE_PIC
+			from (select ROWNUM RNUM, FOLLOW_FROM
+			from follow
+			where FOLLOW_TO = #{userId} and FOLLOW_CHECK = '1'
+			order by FOLLOW_DATE desc)
+			join MEMBER ON FOLLOW_FROM = USERID
+			where RNUM between ${start} and ${end}
+		]]>
+	</select>
+	
+	<select id="getFollower" resultMap="memberResultSet" parameterType="java.util.HashMap">
+		<![CDATA[
+			select RNUM, USERID, NICKNAME, PROFILE_PIC
+			from (select ROWNUM RNUM, FOLLOW_TO
+			from follow
+			where FOLLOW_FROM = #{userId} and FOLLOW_CHECK = '1'
+			order by FOLLOW_DATE desc)
+			join MEMBER ON FOLLOW_TO = USERID
+			where RNUM between ${start} and ${end}
+		]]>
+	</select>
+	
+	<select id="getFollowingAllCount" resultType="_int">
+		select count(*)
+		from follow
+		where FOLLOW_FROM = #{userId} and FOLLOW_CHECK = '1'
+	</select>
+	
+	<select id="getFollowerAllCount" resultType="_int">
+		select count(*)
+		from follow
+		where FOLLOW_TO = #{userId} and FOLLOW_CHECK = '1'
+	</select>
+	
+	<select id="getMemberInfo" resultMap="memberResultSet">
+		select *
+		from member
+		where userId = #{userId}
+			and enabled = '1'
+	</select>
+	
+	<select id="isExistFollow" parameterType="java.util.HashMap" resultType="_int">
+		select count(*)
+		from follow
+		where FOLLOW_FROM = #{userId} and FOLLOW_TO = #{targetId}
+	</select>
+	
+	<insert id="insertFollow" parameterType="java.util.HashMap">
+		insert into follow values (FOL_SEQ.NEXTVAL, #{userId}, #{targetId}, sysdate, '1')
+	</insert>
+	
+	<update id="increaseFollowing">
+		update (select *
+        		from member
+        		where USERID = #{userId})
+		set FOLLOWING_COUNT = FOLLOWING_COUNT + 1
+	</update>
+	
+	<update id="increaseFollower">
+		update (select *
+        		from member
+        		where USERID = #{targetId})
+		set FOLLOWER_COUNT = FOLLOWER_COUNT + 1
+	</update>
+	
+	<update id="deleteFollow">
+		update follow
+		set FOLLOW_CHECK = '0'
+		where FOLLOW_CODE = ${followCode}
+	</update>
+	
+	<update id="decreaseFollowing">
+		update (select *
+        		from member
+        		where USERID = #{userId})
+		set FOLLOWING_COUNT = FOLLOWING_COUNT - 1 
+	</update>
+	
+	<update id="decreaseFollower">
+		update (select *
+        		from member
+        		where USERID = #{targetId})
+		set FOLLOWER_COUNT = FOLLOWER_COUNT - 1
+	</update>
+	
+	<select id="getFollowCheck" parameterType="java.util.HashMap" resultType="string">
+		select FOLLOW_CHECK
+		from follow
+		where FOLLOW_FROM = #{userId} and FOLLOW_TO = #{targetId}
+	</select>
+	
+	<select id="getFollowCode" parameterType="java.util.HashMap" resultType="_int">
+		select FOLLOW_CODE
+		from follow
+		where FOLLOW_FROM = #{userId} and FOLLOW_TO = #{targetId}
+	</select>
+	
+	<update id="updateFollow">
+		update follow
+		set FOLLOW_CHECK = '1'
+		where FOLLOW_CODE = ${followCode}
+	</update>
+	
+	<select id="getProInfo" resultMap="registerSet">
+		select *
+		from register_pro
+		where REGISTER_USER = #{userId}
+	</select>
+	
+	<insert id="reportMember">
+		insert into report_member values(RPM_SEQ.NEXTVAL, #{report_content}, sysdate, 'W', ${member_report_category}, #{report_to}, #{report_from})
+	</insert>
+	
+	<!-- 형준이형 전문가등록 -->
+	   <select id="memberCheckid" resultType="_int">
+      select count(*)
+      from MEMBER
+      where USERID = #{userid}
+   </select>
+   
+   <select id="loginUser" resultMap="memberResultSet">
+      select *
+      from member
+      where USERID = #{userid} and PASSWORD = #{userpwd}
+   </select>
+   
+   <select id="loginCk" resultType="_int">
+      select count(*)
+      from member
+      where USERID = #{id}
+   </select>
+   
+
+   <resultMap type="register" id="registerSet">
+      <id column="REGISTER_NO" property="register_no"/>
+      <result column="SPECIALTY_FIELD" property="specialrt_field"/>
+      <result column="INTRODUCE" property="introduce"/>
+      <result column="SCHOOL_NAME" property="school_name"/>
+      <result column="MAJOR" property="major"/>
+      <result column="CAREER" property="career"/>
+      <result column="CERTIFICATION" property="certification"/>
+      <result column="SPECIAL_CATEGORY" property="top_special_category"/>
+      <result column="SERVICE_TYPE" property="service_type"/>
+      <result column="REGISTER_APPROVE" property="register_approve"/>
+      <result column="REGISTER_DATE" property="register_date"/>
+      <result column="REGISTER_USER" property="register_user"/>
+   </resultMap>
+   
+   <resultMap type="registerfile" id="registerfileSet">
+      <id column="FILE_NUMBER" property="file_number"/>
+      <result column="FILE_ORIGIN_NAME" property="file_origin_name"/>
+      <result column="FILE_CHANGE_NAME" property="file_change_name"/>
+      <result column="FILE_EXTENSION_NAME" property="file_extension_name"/>
+      <result column="FILE_SIZE" property="file_size"/>
+      <result column="FILE_UPLOADER" property="file_upload_date"/>
+      <result column="FILE_PATH" property="file_path"/>
+      <result column="FILE_THUMBNAIL" property="file_thumbnail"/>
+      <result column="BOARD_NUMBER" property="register_no"/>
+      <result column="FILE_TYPE" property="file_type"/>
+      <result column="FILE_UPLOADER"  property="file_upload"/>
+   </resultMap>
+   
+   
+   
+   
+   
+   <insert id="MemberInsert" parameterType="Member">
+      insert into
+      MEMBER
+      values(#{userid},#{userpwd},#{nickname},#{name},#{socialnumber},#{gender},#{email},#{phone},
+      #{address},#{url},default,default,#{profile},sysdate,default,default
+      ,null,#{pro_aprove},#{authority})
+   </insert>
+   
+   
+   <insert id="memberIntrestInsert">
+      insert into like_interests_management values(#{in1},#{userid})
+   </insert>
+   
+   <select id="pronumberSelect" resultType="_int">
+      select count(*)
+      from register_pro
+   </select>
+   
+   <select id="registerNum" resultType="_int" >
+         select count(*)
+      from register_pro
+   </select>
+   
+   <select id="LastCheck" resultType="_int">
+      select count(*)
+      from register_file
+      where  register_no = ${register_no}
+   </select>
+   
+   <insert id="proinsert" parameterType="register">
+      insert into register_pro
+      values(#{register_no},#{specialrt_field},#{introduce},#{school_name},#{major},#{career},#{certification},#{top_special_category},#{service_type},sysdate,#{register_approve},#{register_user})
+   </insert>
+<!--    <update id=""></update> -->
+
+
+   <select id="fileNumChkeck" resultType="_int" >
+      select register_no
+      from register_pro
+      where register_user = #{userid}
+   </select>
+   
+   <select id="firstNumber" resultType="_int">
+      select count(*)
+      from register_file
+   </select>
+   
+   
+   <select id="fileNumberselect"  parameterType="register" resultType="_int" >
+      select max(file_number)
+      from register_file
+      
+   </select>
+
+  <insert id="insertFile" parameterType="registerfile" >
+      insert into REGISTER_FILE VALUES(${file_number},#{file_origin_name},#{file_change_name},#{file_extension_name},#{file_size},sysdate,#{file_path},#{file_thumbnail},${register_no},${file_type},#{file_upload})
+   </insert>	
+		
+</mapper>
