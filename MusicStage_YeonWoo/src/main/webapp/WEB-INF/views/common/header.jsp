@@ -181,7 +181,7 @@
 	var loginUser = "${loginUser.userId}";
 	
 	$(document).ready(function() {
-		if(loginUser != null){
+		if(loginUser != ""){
 			connectWs();		
 		}
 	});
