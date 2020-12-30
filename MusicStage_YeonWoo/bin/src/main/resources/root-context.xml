@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- DataSource등록 ojdbc6 -->
+	<!-- 
+ 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="Spring"/>
+		<property name="password" value="Spring"/>
+ 	</bean>
+ 	 -->
+ 	 
+ 	<!-- DataSource등록 ojdbc8 -->
+<!--  	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"> -->
+<!-- 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/> -->
+<!-- 		<property name="url" value="jdbc:oracle:thin:@localhost:1521/xepdb1"/> -->
+<!-- 		<property name="username" value="Spring"/> -->
+<!-- 		<property name="password" value="Spring"/> -->
+<!--  	</bean> -->
+ 	
+ 	
+  	<!-- log4jdbc-remix DataSource등록 ojdbc6 -->
+<!--  	<bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> -->
+<!-- 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/> -->
+<!-- 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/> -->
+<!-- 		<property name="username" value="MusicStage"/> -->
+<!-- 		<property name="password" value="MusicStage"/> -->
+<!--  	</bean>	 -->
+ 	
+ 	
+ 	<!-- log4jdbc-remix DataSource등록 ojdbc8 -->
+ 	<bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521/xepdb1"/>
+		<property name="username" value="MusicStage"/>
+		<property name="password" value="MusicStage"/>
+ 	</bean>
+ 	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+ 		<constructor-arg ref="realDataSource" />
+ 		<property name="logFormatter">
+ 			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+ 				<property name="loggingType" value="MULTI_LINE" />
+ 				<property name="sqlPrefix" value="[SQL] " />
+ 			</bean>
+ 		</property>
+ 	</bean>
+ 	
+ 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+ 		<property name="dataSource" ref="dataSource"></property>
+ 	</bean>
+ 	
+ 	<!-- sqlSession 빈 등록 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:/mybatis-config.xml" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+    </bean> 
+ 	
+ 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+ 		<property name="dataSource" ref="dataSource"></property>
+ 	</bean>
+    
+	<!-- 파일 업로드 시 파일 크기 지정 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="-1" />
+		<property name="maxInMemorySize" value="-1" />
+	</bean>
+	
+	<bean id="member" class="com.musicstage.spring.member.model.vo.Member" />	
+	
+	<tx:annotation-driven/>
+	
+</beans>

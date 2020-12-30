@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- namespace : 연결하고 싶은 mapper를 구분하는 속성 -->
+<!-- mybatis-config.xml에서 mapper 등록 -->
+<mapper namespace="chattingMapper">
+
+	<!-- JoinRoom ResultSet -->
+	<resultMap type="JoinRoom" id="joinRoomResultSet">
+		<id property="join_id" column="JOIN_ID" />			
+		<result property="chatRoom_id" column="CHATROOM_ID" />
+		<result property="join_userId" column="JOIN_USERID" />
+		<result property="join_user_nickName" column="JOIN_USER_NICKNAME" />
+		<result property="join_user_profile_pic" column="JOIN_USER_PROFILE_PIC" />
+		<result property="lastMessage" column="LASTMESSAGE" />
+		<result property="lastMessage_time" column="LASTMESSAGE_TIME" />	
+		<result property="unRead_message" column="UNREAD_MESSAGE" />	
+	</resultMap>
+	
+	<!-- Message ResultSet -->
+	<resultMap type="Message" id="messageResultSet">
+		<id property="message_id" column="MESSAGE_ID" />			
+		<result property="message_content" column="MESSAGE_CONTENT" />
+		<result property="message_isRead" column="MESSAGE_ISREAD" />
+		<result property="message_sender" column="MESSAGE_SENDER" />
+		<result property="message_sender_nickName" column="MESSAGE_SENDER_NICKNAME" />	
+		<result property="message_sender_profile" column="MESSAGE_SENDER_PROFILE_PIC" />	
+		<result property="chatRoom_id" column="CHATROOM_ID" />
+	</resultMap>	
+	
+		<!-- Message ResultSet -->
+	<resultMap type="com.musicstage.spring.chatting.model.vo.ChattingRoom" id="chattingRoomResultSet">
+		<id property="chatRoom_id" column="CHATROOM_ID" />			
+		<result property="chatRoom_time" column="CHATROOM_TIME" />
+	</resultMap>	
+	
+	<!-- 현재 참여하고 있는 채팅방 목록 불러오기 -->
+	<select id="getJoinRoomList" resultMap="joinRoomResultSet">	
+		SELECT J.*, M.NICKNAME AS "JOIN_USER_NICKNAME", M.PROFILE_PIC AS "JOIN_USER_PROFILE_PIC", 
+		(SELECT MESSAGE_CONTENT
+		FROM (SELECT MESSAGE_CONTENT
+		        FROM MESSAGE MG
+		        WHERE MG.CHATROOM_ID = J.CHATROOM_ID
+		        ORDER BY MESSAGE_ID DESC)
+		WHERE ROWNUM = 1) AS "LASTMESSAGE",
+		(SELECT MESSAGE_SENDTIME
+		FROM (SELECT MESSAGE_SENDTIME
+		        FROM MESSAGE MG
+		        WHERE MG.CHATROOM_ID = J.CHATROOM_ID
+		        ORDER BY MESSAGE_ID DESC)
+		WHERE ROWNUM = 1) AS "LASTMESSAGE_TIME",
+		(SELECT COUNT(*)
+		FROM MESSAGE MG2
+		WHERE MG2.CHATROOM_ID = J.CHATROOM_ID AND MESSAGE_SENDER != #{userId} AND MESSAGE_ISREAD = '0') AS "UNREAD_MESSAGE"
+		FROM JOIN_ROOM J INNER JOIN MEMBER M
+		ON(J.JOIN_USERID = M.USERID)
+		WHERE J.JOIN_USERID != #{userId} AND J.CHATROOM_ID IN (SELECT CHATROOM_ID
+		                                                        FROM JOIN_ROOM 
+		                                                        WHERE JOIN_USERID = #{userId})
+		ORDER BY LASTMESSAGE_TIME DESC
+	</select>
+	
+	<!-- 매세지 목록 전체 불러오기 -->
+	<select id="getMessageList" resultMap="messageResultSet">
+		<!-- 두가지 버젼이있음 -->
+		<!-- SELECT MSG.*, M.NICKNAME AS "MESSAGE_SENDER_NICKNAME", M.PROFILE_PIC AS "MESSAGE_SENDER_PROFILE_PIC" -->
+		SELECT MSG.*, M.NICKNAME AS "MESSAGE_SENDER_NICKNAME", M.PROFILE_PIC AS "JOIN_USER_PROFILE_PIC"
+		FROM MESSAGE MSG INNER JOIN MEMBER M
+		ON (MSG.MESSAGE_SENDER = M.USERID)
+		WHERE CHATROOM_ID = #{chatRoom_id}
+		ORDER BY MESSAGE_ID ASC
+	</select>
+	
+	<!-- 채팅방 생성하기 전 채팅방 있는지 여부 확인 -->
+	<select id="checkChattingRoomIsExist" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM JOIN_ROOM
+		WHERE JOIN_USERID = #{senderUserId} AND CHATROOM_ID IN (SELECT CHATROOM_ID FROM JOIN_ROOM WHERE JOIN_USERID = #{partnerUserId})
+	</select>	
+	
+	<!-- 채팅방 생성하기 -->
+	<insert id="createChattingRoom">
+		INSERT INTO CHATTING_ROOM (CHATROOM_ID, CHATROOM_TIME)
+		VALUES(CHAT_SEQ.NEXTVAL, SYSTIMESTAMP)
+	</insert>
+	
+	<!-- 채팅방 입장하기 매세지 보낸사람 -->
+	<insert id="joinRoomA" parameterType="map">
+		INSERT INTO JOIN_ROOM (JOIN_ID, CHATROOM_ID, JOIN_USERID)
+		VALUES(JOIN_SEQ.NEXTVAL, CHAT_SEQ.CURRVAL, #{senderUserId})
+	</insert>
+
+	<!-- 채팅방 입장하기 매세지 받은사람 -->
+	<insert id="joinRoomB" parameterType="map">
+		INSERT INTO JOIN_ROOM (JOIN_ID, CHATROOM_ID, JOIN_USERID)
+		VALUES(JOIN_SEQ.NEXTVAL, CHAT_SEQ.CURRVAL, #{partnerUserId})
+	</insert>
+	
+	<!-- 채팅방 별 읽지 않은 매세지 개수 -->
+	<select id="getCountUnReadMessage" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGE
+		WHERE CHATROOM_ID = #{chatRoom_id} AND MESSAGE_SENDER != #{userId} AND MESSAGE_ISREAD = '0'
+	</select>
+	
+	<!-- 전체 읽지 않은 매세지 개수 -->
+	<select id="getCountUnReadAllMessage" parameterType="string" resultType="int">    	                                                                            
+		SELECT COUNT(*)
+		FROM MESSAGE M
+		WHERE M.MESSAGE_SENDER IN (SELECT J.JOIN_USERID
+                            		FROM JOIN_ROOM J
+                            		WHERE J.JOIN_USERID != #{userId} AND M.CHATROOM_ID IN (SELECT J.CHATROOM_ID 
+                            																FROM JOIN_ROOM J 
+                            																WHERE JOIN_USERID = #{userId}) AND MESSAGE_ISREAD = '0')                                                                       
+	</select>	
+	
+	<!-- 매세지 내용 DB에 저장 -->
+	<insert id="saveMessage" parameterType="map">
+		INSERT INTO MESSAGE(MESSAGE_ID, MESSAGE_CONTENT, MESSAGE_SENDTIME, MESSAGE_ISREAD, MESSAGE_SENDER, CHATROOM_ID)
+		VALUES(MSG_SEQ.NEXTVAL, #{message_content}, SYSTIMESTAMP, '0', #{message_sender}, #{chatRoom_id})
+	</insert>
+	
+	<!-- 스크롤 올릴때마다 가져오는 매세지 20개  -->
+	<select id="scrollMessageList" resultMap="messageResultSet" parameterType="map">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT MSG.*, M.NICKNAME AS "MESSAGE_SENDER_NICKNAME", M.PROFILE_PIC AS "MESSAGE_SENDER_PROFILE_PIC"
+			    FROM MESSAGE MSG INNER JOIN MEMBER M
+			    ON (MSG.MESSAGE_SENDER = M.USERID)
+			    WHERE CHATROOM_ID = #{chatRoom_id} AND MSG.MESSAGE_ID <= #{messageToStart}
+			    ORDER BY MESSAGE_ID DESC)
+			WHERE ROWNUM <= 20
+		]]>
+	</select>
+	
+	<!-- 채팅방의 매세지 읽음 처리 -->
+	<update id ="updateReadCheck">
+		UPDATE MESSAGE SET MESSAGE_ISREAD = '1'
+		WHERE CHATROOM_ID = #{chatRoom_id} AND MESSAGE_SENDER != #{userId} AND MESSAGE_ISREAD = '0'
+	</update>
+	
+	<!-- 채팅방 정보 -->
+	<select id = "selectJoinRoom" resultMap="joinRoomResultSet" parameterType="map">
+		SELECT J.*, M.NICKNAME AS "JOIN_USER_NICKNAME", M.PROFILE_PIC AS "JOIN_USER_PROFILE_PIC", 
+		(SELECT MESSAGE_CONTENT
+		FROM (SELECT MESSAGE_CONTENT
+		        FROM MESSAGE
+		        WHERE CHATROOM_ID = #{chatRoom_id}
+		        ORDER BY MESSAGE_ID DESC)
+		WHERE ROWNUM = 1) AS "LASTMESSAGE",
+		(SELECT MESSAGE_SENDTIME
+		FROM (SELECT MESSAGE_SENDTIME
+		        FROM MESSAGE
+		        WHERE CHATROOM_ID = #{chatRoom_id}
+		        ORDER BY MESSAGE_ID DESC)
+		WHERE ROWNUM = 1) AS "LASTMESSAGE_TIME",
+		(SELECT COUNT(*)
+		FROM MESSAGE MG2
+		WHERE MG2.CHATROOM_ID = #{chatRoom_id} AND MESSAGE_SENDER = #{partnerUserId} AND MESSAGE_ISREAD = '0') AS "UNREAD_MESSAGE"
+		FROM JOIN_ROOM J INNER JOIN MEMBER M
+		ON(J.JOIN_USERID = M.USERID)
+		WHERE J.JOIN_USERID = #{partnerUserId} AND J.CHATROOM_ID = #{chatRoom_id}
+	</select>
+
+</mapper>

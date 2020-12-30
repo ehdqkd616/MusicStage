@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="boardMapper">
+ <!-- 서영 -->
+   <!-- xml에서 SQL구문 작성시 연산자 기호와 문자열을 구분할 수 없을 경우 ß<![CDATA[ ]]>구문 안에 SQL을 작성하면 
+      연산자 기호를 문자열로 처리할 수 있다. -->
+
+   <!-- 피드타입 : 전체 -->
+   <select id="allFeedList" resultMap="boardResultMap">
+      select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y'
+      order by B_WRITE_DATE desc
+   </select>
+
+   <!-- 피드타입 : 소셜 게시판 -->
+   <select id="socialFeedList" resultMap="boardResultMap">
+      select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' and board_category ='1'
+      order
+      by B_WRITE_DATE desc
+   </select>
+
+   <!-- 피드타입 : 찾아요 게시판 -->
+   <select id="findFeedList" resultMap="boardResultMap">
+      select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' and board_category ='2'
+      order
+      by B_WRITE_DATE desc
+   </select>
+
+   <!-- 피드타입 : 컬럼 게시판 -->
+   <select id="columnFeedList" resultMap="boardResultMap">
+      select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' and board_category ='3'
+      order
+      by B_WRITE_DATE desc
+   </select>
+   
+   <!-- 피드타입 : 리뷰 게시판 -->
+   <select id="reviewFeedList" resultMap="boardResultMap">
+      select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' and board_category ='4'
+      order
+      by B_WRITE_DATE desc
+   </select>
+
+   <!-- 보드타입 : 전체 -->
+   <select id="allBoardList" resultMap="boardResultMap">
+      select *
+      from (select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' AND FILE_THUMBNAIL = '1'
+      order by B_WRITE_DATE desc)
+      where <![CDATA[ ROWNUM <= 6 ]]>
+   </select>
+
+   <!-- 보드타입 : 소셜 게시판 -->
+   <select id="socialBoardList" resultMap="boardResultMap">
+      select *
+      from (select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' AND FILE_THUMBNAIL = '1' AND BOARD_CATEGORY = '1'
+      order by B_WRITE_DATE desc)
+      where <![CDATA[ ROWNUM <= 6 ]]>
+   </select>
+
+   <!-- 보드타입 : 찾아요 게시판 -->
+   <select id="findBoardList" resultMap="boardResultMap">
+       select *
+      from (select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' AND FILE_THUMBNAIL = '1' AND BOARD_CATEGORY = '2'
+      order by B_WRITE_DATE desc)
+      where <![CDATA[ ROWNUM <= 6 ]]>
+   </select>
+
+   <!-- 보드타입 : 컬럼 게시판 -->
+   <select id="columnBoardList" resultMap="boardResultMap">
+       select *
+      from (select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' AND FILE_THUMBNAIL = '1' AND BOARD_CATEGORY = '3'
+      order by B_WRITE_DATE desc)
+      where <![CDATA[ ROWNUM <= 6 ]]>
+   </select>
+
+   <!-- 보드타입 : 리뷰 게시판 -->
+   <select id="reviewBoardList" resultMap="boardResultMap">
+       select *
+      from (select *
+      from board
+      join member on (b_writer = userid)
+      join board_file on (board.board_number = board_file.board_number)
+      where
+      board_enabled='1' and board_approve='Y' AND FILE_THUMBNAIL = '1' AND BOARD_CATEGORY = '4'
+      order by B_WRITE_DATE desc)
+      where <![CDATA[ ROWNUM <= 6 ]]>
+   </select>
+   
+   
+   
+   <!-- 좋아요 -->
+   <insert id="insertLike" parameterType="hashmap">
+      insert into like_board
+      values(LIKE_SEQ.NEXTVAL,#{bNo},#{id},sysdate,1)
+   </insert>
+   
+   
+   
+   <!-- 좋아요취소 -->
+   <update id="deleteLike" parameterType="hashmap">
+      UPDATE like_board SET LIKE_BOARD_CHECK='0' WHERE
+      LIKE_BOARD_NUMBER=#{bNo} and LIKE_BOARD_USER=#{id}
+      <!-- DELETE FROM like_board where LIKE_BOARD_NUMBER=#{bNo} and LIKE_BOARD_USER=#{id} -->
+   </update>
+
+   <!-- 좋아요 리스트 -->
+   <select id="likeList" resultType="LikeBoard"
+      parameterType="string">
+      select * from like_board where LIKE_BOARD_USER='${id}'
+      and LIKE_BOARD_CHECK='1'
+   </select>
+   
+   <!-- 좋아요 시 보드라이크 1증가 -->
+   <update id="addLikeCount" parameterType="hashmap">
+      update board set
+      like_count=like_count+1 where board_number=#{bNo}
+   </update>
+
+   <!-- 좋아요 취소 시 보드라이크 1감소 -->
+   <update id="subtractLikeCount" parameterType="hashmap">
+      update board set
+      like_count=like_count-1 where board_number=#{bNo}
+   </update>
+   
+   <select id="likeCount" resultType="_int">
+      select LIKE_COUNT
+      from board
+      where BOARD_NUMBER = #{bNo}
+   </select>
+   
+   <!-- 연우 -->
+   <select id="checkLike" parameterType="hashmap" resultType="string">
+      SELECT LIKE_BOARD_USER
+      FROM LIKE_BOARD
+      WHERE LIKE_BOARD_NUMBER=#{bNo} and LIKE_BOARD_USER=#{id}
+   </select>
+   
+   <update  id="updateLike" parameterType="hashmap">
+      UPDATE like_board SET LIKE_BOARD_CHECK='1' WHERE
+      LIKE_BOARD_NUMBER=#{bNo} and LIKE_BOARD_USER=#{id}
+   </update>
+   
+   <!-- 보관함 (12/9) -->
+   <select id="checkKeep" parameterType="hashmap" resultType="string">
+      SELECT SAVE_BOARD_USER
+      FROM SAVE_BOARD
+      WHERE SAVE_BOARD_NUMBER=#{bNo} and SAVE_BOARD_USER=#{id}
+   </select>
+   
+   <update  id="updateKeep" parameterType="hashmap">
+      UPDATE save_board SET SAVE_BOARD_CHECK='1' WHERE
+      SAVE_BOARD_NUMBER=#{bNo} and SAVE_BOARD_USER=#{id}
+   </update>
+  
+   <!-- 보관함 -->
+   <insert id="insertKeep" parameterType="hashmap">
+      insert into save_board
+      values(save_SEQ.NEXTVAL,#{bNo},#{id},sysdate,1)
+   </insert>
+
+   <!-- 보관함 취소 -->
+   <update id="deleteKeep" parameterType="hashmap">
+      UPDATE save_board SET SAVE_BOARD_CHECK='0' WHERE
+      SAVE_BOARD_NUMBER=#{bNo} and SAVE_BOARD_USER=#{id}
+      <!-- DELETE FROM like_board where LIKE_BOARD_NUMBER=#{bNo} and LIKE_BOARD_USER=#{id} -->
+   </update>
+
+   <!-- 보관함 리스트 -->
+   <select id="selectList" parameterType="string" resultType="SaveBoard">
+      select * from save_board where save_BOARD_USER='${id}'
+      and save_BOARD_CHECK='1'
+   </select>
+
+   <!-- 서영 : 신고하기 -->
+   <insert id="insertReportBoard2" parameterType="ReportBoard">
+      INSERT INTO
+      REPORT_BOARD
+      VALUES(RPB_SEQ.NEXTVAL, #{report_content}, SYSTIMESTAMP,
+      'W', #{board_report_category}, #{report_board}, #{report_from})
+   </insert>
+   
+   <!-- 신고했던 게시물인지 확인 -->
+   <select id="ynCheckReport" parameterType="ReportBoard" resultType="_int">
+      select count(*) from report_board where report_from=#{report_from} and report_board=#{report_board}
+   </select>
+   
+   <update id="updateReportCount2" parameterType="ReportBoard">
+      UPDATE BOARD
+      SET REPORT_COUNT = REPORT_COUNT+1
+      WHERE
+      BOARD_NUMBER = #{report_board}
+   </update>
+   
+   <select id="selectBoardModal" parameterType="_int" resultMap="boardResultMap">
+      select * from board join member on (board.b_writer = member.userid)
+                    join board_file on (board.board_number = board_file.board_number) where board.board_number = #{bNo}
+   </select>
+   
+   <!-- 좋아요 모달 . -->
+	<select id="selectLikeBoard" parameterType="map" resultType="LikeBoard">
+	select *
+	from like_board
+	where like_board_number =#{bNo} and like_board_check = '1' and like_board_user =#{id} 
+	</select>
+
+	<select id="scrollAllBoardList" resultMap="boardResultMap" parameterType="_int">
+		<![CDATA[
+			SELECT * 
+			FROM (SELECT *
+         	FROM BOARD
+             JOIN BOARD_FILE USING(BOARD_NUMBER)
+             JOIN MEMBER ON (B_WRITER = USERID)
+         	 WHERE FILE_THUMBNAIL = '1' AND BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND BOARD_NUMBER <= #{bnoToStart}
+          	ORDER BY B_WRITE_DATE DESC) 
+			WHERE ROWNUM <= 6
+		]]>
+	</select>
+	
+	<select id="scrollCategoryList" resultMap="boardResultMap" parameterType="hashmap">
+		<![CDATA[
+			SELECT * 
+			FROM (SELECT *
+         	FROM BOARD
+             JOIN BOARD_FILE USING(BOARD_NUMBER)
+             JOIN MEMBER ON (B_WRITER = USERID)
+         	 WHERE FILE_THUMBNAIL = '1' AND BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND BOARD_NUMBER <= #{bnoToStart} AND BOARD_CATEGORY = #{category}
+          	ORDER BY B_WRITE_DATE DESC) 
+			WHERE ROWNUM <= 6
+		]]>
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 하윤 -->
+	<!-- 사이드바 메뉴 -->
+	<!-- 1. 팔로우 -->
+	<!-- 사용자가 팔로우 한사람들 게시물 가져오기 -->	
+	<!-- 처음 화면에 띄우는 게시물9개 -->
+	<select id="followBoardList" resultMap="boardResultMap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT *
+			    FROM BOARD
+			    JOIN FOLLOW ON (B_WRITER = FOLLOW_TO)
+			    JOIN BOARD_FILE USING(BOARD_NUMBER)
+			    JOIN (SELECT USERID, PROFILE_PIC, NICKNAME FROM MEMBER) ON (B_WRITER = USERID)
+			    WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND FOLLOW_FROM=#{loginUser} AND FILE_THUMBNAIL = '1' 
+			    ORDER BY B_WRITE_DATE DESC)
+			WHERE ROWNUM <= 9
+		]]>
+	</select>
+	
+	<!-- 스크롤 내릴때마다 가져오는 게시물6개  -->
+	<select id="scrollNewFollowList" resultMap="boardResultMap" parameterType="hashMap">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT *
+			    FROM BOARD
+			    JOIN FOLLOW ON (B_WRITER = FOLLOW_TO)
+			    JOIN BOARD_FILE USING(BOARD_NUMBER)
+			    JOIN (SELECT USERID, PROFILE_PIC, NICKNAME FROM MEMBER) ON (B_WRITER = USERID)
+			    WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND FOLLOW_FROM=#{loginUser} AND FILE_THUMBNAIL = '1' AND BOARD_NUMBER <= #{bnoToStart}
+			    ORDER BY B_WRITE_DATE DESC) B
+			WHERE ROWNUM <= 6
+		]]>
+	</select>
+	
+	<update id="updateCount">
+		UPDATE BOARD
+		SET READ_COUNT = READ_COUNT+1
+		WHERE BOARD_NUMBER = #{ bno } 
+	</update>
+	
+	<select id="selectBoard" resultMap="boardResultMap">
+		SELECT *
+		FROM BOARD
+		    JOIN (SELECT * 
+		          FROM BOARD_FILE
+		          JOIN FILE_TYPE USING(FILE_TYPE)
+		          WHERE FILE_THUMBNAIL = '1') USING(BOARD_NUMBER)
+		    JOIN (SELECT USERID, NICKNAME, PROFILE_PIC FROM MEMBER) ON (B_WRITER = USERID)
+		WHERE BOARD_ENABLED = '1' AND BOARD_NUMBER = #{ bno } AND BOARD_APPROVE = 'Y' AND BOARD_ENABLED = '1'
+	</select>
+	
+	<!-- 사진/영상/음악 각각 ArrayList에 담기 -->
+	<select id="selectMusicList" resultMap="boardFileResultMap">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE BOARD_NUMBER = #{ bno } AND FILE_THUMBNAIL = '0' AND FILE_TYPE='3'
+	</select>
+	<select id="selectImageList" resultMap="boardFileResultMap">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE BOARD_NUMBER = #{ bno } AND FILE_THUMBNAIL = '0' AND FILE_TYPE='1'
+	</select>
+	<select id="selectVideoList" resultMap="boardFileResultMap">
+		SELECT *
+		FROM BOARD_FILE
+		WHERE BOARD_NUMBER = #{ bno } AND FILE_THUMBNAIL = '0' AND FILE_TYPE='2'
+	</select>
+	
+	<!-- 부모댓글 -->
+	<select id="parentReplyCount" resultType="int">
+		SELECT COUNT(*)
+		FROM REPLY
+		WHERE REF_BOARD_NUMBER = #{ bno } AND REPLY_ENABLED = '1' AND REPLY_STEP = '0'
+	</select>
+	
+	<select id="selectReply" resultMap="replyResultMap">
+		SELECT *
+		FROM REPLY R
+		    JOIN (SELECT USERID, NICKNAME, PROFILE_PIC FROM MEMBER) ON (R.R_WRITER = USERID)
+		WHERE REF_BOARD_NUMBER = #{ bno } AND REPLY_ENABLED ='1' AND REPLY_STEP = '0'
+		ORDER BY R_WRITE_DATE ASC
+	</select>
+	
+	<select id="selectReply_feed" resultMap="replyResultMap">
+		SELECT *
+		FROM (SELECT * 
+		    FROM REPLY R
+		    JOIN (SELECT USERID, NICKNAME, PROFILE_PIC FROM MEMBER) ON (R.R_WRITER = USERID)
+		WHERE REF_BOARD_NUMBER = #{bno} AND REPLY_ENABLED ='1' AND REPLY_STEP = '0'
+		ORDER BY R_WRITE_DATE DESC)
+		<![CDATA[WHERE ROWNUM <= 3]]>
+	</select>
+	
+	<select id="replyCount" resultType="_int">
+		select count(*)
+		from reply
+		where ref_board_number = #{bno} and reply_enabled = '1'
+	</select>
+	
+	<insert id="insertReply" parameterType="Reply">
+		INSERT INTO REPLY
+		VALUES(R_SEQ.NEXTVAL, #{ reply_content }, SYSTIMESTAMP, '0', R_SEQ.CURRVAL, '1', #{ r_writer }, #{ ref_board_number })
+	</insert>
+	
+	<update id="deleteParentReply" parameterType="Reply">
+		UPDATE REPLY
+		SET REPLY_ENABLED = 0
+		WHERE REF_BOARD_NUMBER = #{ ref_board_number } AND PARENT_NUMBER = #{ parent_number }
+	</update>
+	
+	
+	<!-- 자식댓글 -->
+	<select id="childReplyCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPLY R
+		WHERE REPLY_STEP = '1' AND REPLY_ENABLED = '1' AND PARENT_NUMBER = #{ parent_number }
+	</select>
+	
+	<select id="selectChildReply" resultMap="replyResultMap">
+		SELECT *
+		FROM REPLY R
+		    JOIN (SELECT USERID, NICKNAME, PROFILE_PIC FROM MEMBER) ON (R.R_WRITER = USERID)
+		WHERE PARENT_NUMBER = #{ parent_num } AND REPLY_ENABLED ='1' AND REPLY_STEP = '1'
+		ORDER BY R_WRITE_DATE ASC
+	</select>
+	
+	<insert id="insertChildReply" parameterType="Reply">
+		INSERT INTO REPLY
+		VALUES(R_SEQ.NEXTVAL, #{reply_content}, SYSTIMESTAMP, '1', #{parent_number}, '1', #{r_writer}, #{ref_board_number})
+	</insert>
+	
+	<update id="deleteCildReply">
+		UPDATE REPLY
+		SET REPLY_ENABLED = 0
+		WHERE REPLY_NUMBER = #{child_num} AND PARENT_NUMBER = #{parent_num}
+	</update>
+	
+	<!-- 신고하기 -->
+	<insert id="insertReportBoard" parameterType="ReportBoard">
+		INSERT INTO REPORT_BOARD
+		VALUES(RPB_SEQ.NEXTVAL, #{report_content}, SYSTIMESTAMP, DEFAULT, #{board_report_category}, #{report_board}, #{report_from})
+	</insert>
+	
+	<update id="updateReportCount">
+		UPDATE BOARD
+		SET REPORT_COUNT = REPORT_COUNT+1
+		WHERE BOARD_NUMBER = #{bno}
+	</update>
+	
+	<update id="deleteBoard">
+		UPDATE BOARD
+		SET BOARD_ENABLED = 0
+		WHERE BOARD_NUMBER = #{bno}
+	</update>
+	
+	<!-- 2. 보관함 -->
+	<select id="selectSaveBoardList" resultMap="saveBoardResultMap">
+		<![CDATA[
+			SELECT * 
+			FROM SAVE_BOARD S
+			    JOIN (SELECT *
+			          FROM BOARD
+			             JOIN BOARD_FILE USING(BOARD_NUMBER)
+			             JOIN MEMBER ON (B_WRITER = USERID)
+			          WHERE FILE_THUMBNAIL = '1' AND BOARD_ENABLED='1' AND BOARD_APPROVE='Y') BOARD ON ( SAVE_BOARD_NUMBER = BOARD_NUMBER)
+			WHERE SAVE_BOARD_USER = #{loginUser} AND SAVE_BOARD_CHECK = '1' AND ROWNUM <= 6
+			ORDER BY SAVE_BOARD_CODE DESC
+		]]>
+	</select>
+	
+	<select id="selectScrollSaveList" resultMap="saveBoardResultMap" parameterType="hashmap">
+		<![CDATA[
+			SELECT * 
+			FROM SAVE_BOARD S
+			    JOIN (SELECT *
+			          FROM BOARD
+			             JOIN BOARD_FILE USING(BOARD_NUMBER)
+			             JOIN MEMBER ON (B_WRITER = USERID)
+			          WHERE FILE_THUMBNAIL = '1' AND BOARD_ENABLED='1' AND BOARD_APPROVE='Y') BOARD ON ( SAVE_BOARD_NUMBER = BOARD_NUMBER)
+			WHERE SAVE_BOARD_USER = #{loginUser} AND SAVE_BOARD_CODE <= #{lastSbno} AND ROWNUM <= 6
+			ORDER BY SAVE_BOARD_CODE DESC
+		]]>
+	</select>
+	
+	<!-- 3. fresh -->
+	<select id="selectFirstBoard" resultMap="boardResultMap">
+		SELECT *
+		FROM BOARD B
+		    JOIN BOARD_FILE USING(BOARD_NUMBER)
+		    JOIN MEMBER ON (B_WRITER = USERID)
+		WHERE BOARD_NUMBER IN (
+		    SELECT MIN(BOARD_NUMBER)
+		    FROM BOARD
+		    GROUP BY B_WRITER)
+		ORDER BY B_WRITE_DATE DESC
+	</select>
+	
+	<!-- Board insert -->
+	<insert id="insertBoard" parameterType="Board">
+		<selectKey keyProperty="board_number" resultType="Integer" order="AFTER"> SELECT B_SEQ.currval FROM dual </selectKey>
+		INSERT INTO BOARD
+		VALUES(B_SEQ.NEXTVAL, #{board_title}, #{board_content}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, SYSTIMESTAMP, SYSTIMESTAMP, 
+		<choose>
+			<!-- 찾아요(학생찾아요,연습실)/컬럼은 관리자승인받게 >> 'W'ait -->
+			<when test="board_category == 2 and search_type.equals('fs')"> 'W' </when>
+			<when test="board_category == 2 and search_type.equals('fp')"> 'W' </when>
+			<when test="board_category == 3">'W' </when>
+			<otherwise>DEFAULT </otherwise>
+		</choose>,
+		<if test="sub_curriculum == null">NULL</if>
+		<if test="sub_curriculum != null">#{sub_curriculum}</if>,
+		<if test="sub_address == null">NULL</if>
+		<if test="sub_address != null">#{sub_address}</if>,
+		<if test="sub_delivery_format == null">NULL</if>
+		<if test="sub_delivery_format != null">#{sub_delivery_format}</if>,
+		<if test="search_type == null">NULL</if>
+		<if test="search_type != null">#{search_type}</if>, 
+		<if test="sub_category == null">NULL</if>
+		<if test="sub_category != null">#{sub_category}</if>,#{board_category}, #{b_writer})
+	</insert>
+	
+	<update id="insertBoardFile" parameterType="java.util.ArrayList">
+			INSERT INTO BOARD_FILE(
+					FILE_NUMBER, FILE_ORIGIN_NAME, FILE_CHANGE_NAME, FILE__EXTENSION_NAME, FILE_SIZE, FILE_UPLOAD_DATE, FILE_PATH, FILE_THUMBNAIL, BOARD_NUMBER, FILE_TYPE, FILE_UPLOADER
+			)
+			SELECT F_SEQ.NEXTVAL AS fileSeq, B.*
+			FROM (
+				<foreach collection="list" item="item" index="index" separator="union all">
+					SELECT
+						#{item.file_origin_name} as file_origin_name, 
+						#{item.file_change_name} as file_change_name, 
+						#{item.file__extension_name} as file__extension_name, 
+						#{item.file_size} as file_size, 
+						systimestamp as file_upload_date, 
+						#{item.file_path} as file_path, 
+						#{item.file_thumbnail} as file_thumbnail, 
+						#{item.board_number} as board_number, 
+						#{item.file_type} as file_type, 
+						#{item.file_uploader} as file_uploader
+					FROM DUAL
+				</foreach>
+			) B
+	</update>
+	
+	<!-- 수정페이지 -->
+	<!-- 이미지 지우기 -->
+	<delete id="deleteFile">
+		DELETE FROM BOARD_FILE
+		WHERE FILE_NUMBER = #{fileNum}
+	</delete>
+	
+	<update id="updateBoard">
+		UPDATE BOARD
+		SET BOARD_TITLE = #{board_title}, BOARD_CONTENT = #{board_content}, B_MODIFY_DATE = SYSTIMESTAMP,
+		<if test="sub_curriculum == null">SUB_CURRICULUM = NULL,</if>
+		<if test="sub_curriculum != null">SUB_CURRICULUM = #{sub_curriculum},</if>
+		<if test="sub_address == null">SUB_ADDRESS = NULL,</if>
+		<if test="sub_address != null">SUB_ADDRESS = #{sub_address},</if>
+		<if test="sub_delivery_format == null">SUB_DELIVERY_FORMAT = NULL,</if>
+		<if test="sub_delivery_format != null">SUB_DELIVERY_FORMAT = #{sub_delivery_format},</if>
+		<if test="search_type == null">SEARCH_TYPE = NULL,</if>
+		<if test="search_type != null">SEARCH_TYPE = #{search_type},</if>
+		<if test="sub_category == null">SUB_CATEGORY = NULL,</if>
+		<if test="sub_category != null">SUB_CATEGORY = #{sub_category},</if>
+		BOARD_CATEGORY = #{board_category}
+		WHERE BOARD_NUMBER = #{board_number}
+	</update>
+	
+	<select id="selectThumbnail" resultMap="boardFileResultMap">
+		SELECT * 
+		FROM BOARD_FILE
+		WHERE BOARD_NUMBER = #{bNum} AND FILE_THUMBNAIL = 1
+	</select>
+	
+	<!-- 검색기능 >> 9개씩가져오기 -->
+	<select id="searchBoardList" resultMap="boardResultMap" parameterType="java.util.HashMap">
+		SELECT *
+		FROM (SELECT *
+		    FROM BOARD
+		    JOIN BOARD_FILE USING(BOARD_NUMBER)
+		    JOIN (SELECT USERID, PROFILE_PIC FROM MEMBER) ON (B_WRITER = USERID)
+		    WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND FILE_THUMBNAIL = '1' 
+		    ORDER BY B_WRITE_DATE DESC)
+		WHERE
+		<if test="category == 'social'"> BOARD_TITLE LIKE '%'||#{text}||'%' AND BOARD_CATEGORY = 1</if>
+		<if test="category == 'find'"> BOARD_TITLE LIKE '%'||#{text}||'%' AND BOARD_CATEGORY = 2</if>
+		<if test="category == 'review'"> BOARD_TITLE LIKE '%'||#{text}||'%'AND BOARD_CATEGORY = 4</if>
+		<if test="category == 'column'"> BOARD_TITLE LIKE '%'||#{text}||'%' AND BOARD_CATEGORY = 3</if>
+		<if test="category == 'musician'"> B_WRITER LIKE '%'||#{text}||'%' </if>
+		<![CDATA[
+			AND ROWNUM <= 9 
+		]]>
+	</select>
+	<!-- 검색 스크롤 6개씩 -->
+	<select id="scrollSearchList" resultMap="boardResultMap" parameterType="java.util.HashMap">
+      SELECT *
+      FROM (SELECT *
+          FROM BOARD
+          JOIN BOARD_FILE USING(BOARD_NUMBER)
+          JOIN (SELECT USERID, PROFILE_PIC FROM MEMBER) ON (B_WRITER = USERID)
+          WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND FILE_THUMBNAIL = '1' 
+          ORDER BY B_WRITE_DATE DESC)
+      WHERE
+      <if test="category == 'social'"> BOARD_TITLE LIKE '%'||#{searchText}||'%' AND BOARD_CATEGORY = 1 </if>
+      <if test="category == 'find'"> BOARD_TITLE LIKE '%'||#{searchText}||'%' AND BOARD_CATEGORY = 2</if>
+      <if test="category == 'review'"> BOARD_TITLE LIKE '%'||#{searchText}||'%'AND BOARD_CATEGORY = 3</if>
+      <if test="category == 'column'"> BOARD_TITLE LIKE '%'||#{searchText}||'%' AND BOARD_CATEGORY = 4</if>
+      <if test="category == 'musician'"> B_WRITER LIKE '%'||#{searchText}||'%' </if>
+      <![CDATA[
+         AND BOARD_NUMBER <= #{lastbno} AND ROWNUM <= 6
+      ]]>
+   </select>
+	
+	<!-- 세부카테고리 검색 -->
+	<!-- 찾아요 -->
+	<select id="selectSearchTypeList" parameterType="java.util.ArrayList" resultMap="boardResultMap">
+		SELECT *
+		FROM (SELECT * 
+			  FROM BOARD
+		      	JOIN BOARD_FILE USING(BOARD_NUMBER)
+		      	JOIN MEMBER ON (B_WRITER = USERID)
+		      WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND BOARD_CATEGORY='2' AND FILE_THUMBNAIL = '1' AND 
+		      <foreach collection="list" item="searchName" separator="OR">
+				SEARCH_TYPE = #{searchName}
+			</foreach>
+		ORDER BY B_WRITE_DATE DESC)
+		<![CDATA[ WHERE ROWNUM <= 6 ]]>
+	</select>
+	<!-- 컬럼 -->
+	<select id="selectSearchColumList" parameterType="string" resultMap="boardResultMap">
+		SELECT *
+		FROM (SELECT *
+		    FROM BOARD
+		     	JOIN BOARD_FILE USING(BOARD_NUMBER)
+		        JOIN MEMBER ON (B_WRITER = USERID)
+		    WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND BOARD_CATEGORY='3' AND FILE_THUMBNAIL = '1' AND NICKNAME = #{searchName} 
+		    ORDER BY B_WRITE_DATE DESC)
+		WHERE <![CDATA[ ROWNUM <= 6 ]]>
+	</select>
+	<!-- 리뷰 -->
+	<select id="selectSearchCateList" parameterType="java.util.ArrayList" resultMap="boardResultMap">
+		SELECT *
+		FROM (SELECT *
+			  FROM BOARD
+				JOIN BOARD_FILE USING(BOARD_NUMBER)
+		    	JOIN MEMBER ON (B_WRITER = USERID)
+		      WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND BOARD_CATEGORY='4' AND FILE_THUMBNAIL = '1' AND 
+		<foreach collection="list" item="searchCate" separator="OR">
+			SUB_CATEGORY LIKE '%'||#{searchCate}||'%'
+		</foreach>
+		ORDER BY B_WRITE_DATE DESC)
+		<![CDATA[ WHERE ROWNUM <= 6 ]]>
+	</select>
+	<!-- 세부검색스크롤 -->
+	<select id="scrollDetailSearchList" parameterType="java.util.HashMap" resultMap="boardResultMap">
+		<if test="category == 2">
+			SELECT *
+			FROM (SELECT *
+				  FROM BOARD
+				  	JOIN BOARD_FILE USING (BOARD_NUMBER)
+				  	JOIN MEMBER ON (B_WRITER = USERID)
+				WHERE
+		 	 BOARD_CATEGORY = 2 AND
+			  <foreach collection="searchType" item="search" separator="OR">
+				SEARCH_TYPE = #{search}
+			  </foreach>
+			  ORDER BY BOARD_NUMBER DESC)
+			WHERE BOARD_ENABLED = 1 AND BOARD_APPROVE='Y' AND FILE_THUMBNAIL = '1' AND <![CDATA[ BOARD_NUMBER <= #{bno} AND ROWNUM <= 12 ]]>
+			ORDER BY B_WRITE_DATE DESC
+		</if>
+		
+		<if test="category == 3">
+			SELECT *
+			FROM (SELECT *
+			    FROM BOARD
+			        JOIN BOARD_FILE USING (BOARD_NUMBER)
+			        JOIN MEMBER ON (B_WRITER = USERID)
+			    WHERE BOARD_CATEGORY='3' AND NICKNAME = #{nickName}
+			    ORDER BY BOARD_NUMBER DESC)
+			WHERE BOARD_ENABLED='1' AND BOARD_APPROVE='Y' AND FILE_THUMBNAIL = '1' AND <![CDATA[ BOARD_NUMBER <= #{bno} AND ROWNUM <= 12 ]]>
+			ORDER BY B_WRITE_DATE DESC
+		</if>
+		
+		<if test="category == 4"> 
+			SELECT *
+			FROM (SELECT *
+				  FROM BOARD
+				  	JOIN BOARD_FILE USING (BOARD_NUMBER)
+				  	JOIN MEMBER ON (B_WRITER = USERID)
+				WHERE 
+				  <foreach collection="subCate" item="searchCate" separator="OR">
+						SUB_CATEGORY LIKE '%'||#{searchCate}||'%' 
+				  </foreach>
+				  	AND BOARD_CATEGORY='4'
+				  <if test="detailText != null">
+				  	  OR SUB_CATEGORY LIKE '%'||#{detailText}||'%'
+				  </if>
+			  ORDER BY BOARD_NUMBER DESC)
+			WHERE BOARD_ENABLED = 1 AND BOARD_APPROVE='Y' AND FILE_THUMBNAIL = '1' AND <![CDATA[ BOARD_NUMBER <= #{bno} AND ROWNUM <= 12  ]]>
+			ORDER BY B_WRITE_DATE DESC
+		</if>
+	</select>
+	
+	<!-- 좋아요 갯수가져오기 -->
+	<select id="selectlikeCount" resultType="_int" parameterType="int">
+		SELECT COUNT(*)
+		FROM LIKE_BOARD
+		WHERE LIKE_BOARD_NUMBER = #{bNo} AND LIKE_BOARD_CHECK = 1
+	</select>
+	
+	
+	
+	<!-- 해당게시글 SaveBoard가져오기 -->
+	<select id="selectSaveBoard" resultMap="saveBoardResultMap" parameterType="java.util.Map">
+		select *
+		from save_board
+		where save_board_number =#{bNo} and save_board_check = '1' and save_board_user =#{id} 
+	</select>
+	
+	
+	
+	<!-- 매칭하는 resultMap -->
+	<resultMap type="Board" id="boardResultMap">
+		<id column="BOARD_NUMBER" property="board_number"/>
+		<result column="BOARD_TITLE" property="board_title"/>
+		<result column="BOARD_CONTENT" property="board_content"/>
+		<result column="READ_COUNT" property="read_count"/>
+		<result column="LIKE_COUNT" property="like_count"/>
+		<result column="BOARD_ENABLED" property="board_enabled"/>
+		<result column="REPORT_COUNT" property="report_count"/>
+		<result column="B_WRITE_DATE" property="b_write_date"/>
+		<result column="B_MODIFY_DATE" property="b_modify_date"/>
+		<result column="BOARD_APPROVE" property="board_approve"/>
+		<result column="SUB_CURRICULUM" property="sub_curriculum"/>
+		<result column="SUB_ADDRESS" property="sub_address"/>
+		<result column="SUB_DELIVERY_FORMAT" property="sub_delivery_format"/>
+		<result column="SEARCH_TYPE" property="search_type"/>
+		<result column="SUB_CATEGORY" property="sub_category"/>
+		<result column="BOARD_CATEGORY" property="board_category"/>
+		<result column="B_WRITER" property="b_writer"/>
+		<collection property="follow" resultMap="followResultMap"/>
+		<collection property="boardFile" resultMap="boardFileResultMap"/>
+		<collection property="member" resultMap="memberResultMap"/>
+		<collection property="reply" resultMap="replyResultMap" />
+	</resultMap>
+	
+	<resultMap type="Follow" id="followResultMap">
+		<result column="FOLLOW_FROM" property="follow_from"/>
+		<result column="FOLLOW_TO" property="follow_to"/>
+	</resultMap>
+	
+	<resultMap type="BoardFile" id="boardFileResultMap">
+		<id column="FILE_NUMBER" property="file_number"/>
+		<result column="FILE_ORIGIN_NAME" property="file_origin_name"/>
+		<result column="FILE_CHANGE_NAME" property="file_change_name"/>
+		<result column="FILE__EXTENSION_NAME" property="file__extension_name"/>
+		<result column="FILE_SIZE" property="file_size"/>
+		<result column="FILE_UPLOAD_DATE" property="file_upload_date"/>
+		<result column="FILE_PATH" property="file_path"/>
+		<result column="FILE_THUMBNAIL" property="file_thumbnail"/>
+		<result column="BOARD_NUMBER" property="board_number"/>
+		<result column="FILE_TYPE" property="file_type"/>
+		<result column="FILE_UPLOADER" property="file_uploader"/>
+	</resultMap>
+	
+	<resultMap type="Member" id="memberResultMap">
+		<id column="USERID" property="userId"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="NICKNAME" property="nickName"/>
+		<result column="USERNAME" property="userName"/>
+		<result column="BIRTHDAY" property="birthDay"/>
+		<result column="GENDER" property="gender"/>
+		<result column="EMAIL" property="email"/>
+		<result column="PHONE" property="phone"/>
+		<result column="ADDRESS" property="address"/>
+		<result column="URL_ADDRESS" property="url_address"/>
+		<result column="ENABLED" property="enabled"/>
+		<result column="REPORT_COUNT" property="report_count"/>
+		<result column="PROFILE_PIC" property="profile_pic"/>
+		<result column="JOIN_DATE" property="join_date"/>
+		<result column="FOLLOWER_COUNT" property="follower_count"/>
+		<result column="FOLLOWING_COUNT" property="pollowing_count"/>
+		<result column="INTRODUCE" property="introduce"/>
+		<result column="PRO_APPROVE" property="pro_approve"/>
+		<result column="AUTHORITY" property="authority" />
+<!-- 		<result column="AUTHORITY" property="authority" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/> -->
+	</resultMap>
+	
+	<resultMap type="BoardCategories" id="boardCategoriesResultMap">
+		<id column="BOARD_CATEGORY" property="board_category" />
+		<result column="BOARD_CATEGORY_NAME" property="board_category_name" />
+	</resultMap>
+	
+	<resultMap type="Reply" id="replyResultMap">
+		<id column="REPLY_NUMBER" property="reply_number"/>
+		<result column="REPLY_CONTENT" property="reply_content"/>
+		<result column="R_WRITE_DATE" property="r_write_date"/>
+		<result column="REPLY_STEP" property="step_number"/>
+		<result column="PARENT_NUMBER" property="parent_number"/>
+		<result column="REPLY_ENABLED" property="reply_enabled"/>
+		<result column="REF_BOARD_NUMBER" property="ref_board_number"/>
+		<result column="R_WRITER" property="r_writer"/>
+		<result column="NICKNAME" property="r_writer_nickName"/>
+		<result column="PROFILE_PIC" property="profile_pic"/>
+	</resultMap>
+	
+	<resultMap type="SaveBoard" id="saveBoardResultMap">
+		<id column="SAVE_BOARD_CODE" property="save_board_code"/>
+		<result column="SAVE_BOARD_NUMBER" property="save_board_number"/>
+		<result column="SAVE_BOARD_USER" property="save_board_user"/>
+		<result column="SAVE_BOARD_DATE" property="save_board_date"/>
+		<result column="SAVE_BOARD_CHECK" property="save_board_check"/>
+		<collection property="board" resultMap="boardResultMap"/>
+	</resultMap>
+	
+	<!-- 규동 -->
+	<select id="countBoard" resultType="_int">
+		select count(*)
+		from board
+		where B_WRITER = #{userId}
+	</select>
+	
+	<select id="getBoardList" resultMap="boardResultMap" parameterType="java.util.HashMap">
+		select *
+    	from (select ROWNUM RNUM, b.BOARD_TITLE, FILE_CHANGE_NAME, BOARD_NUMBER, BOARD_CATEGORY, FILE_PATH
+        	 from board b
+   			 JOIN BOARD_FILE USING(BOARD_NUMBER)
+    		 where B_WRITER = #{userId} and BOARD_ENABLED = '1'and BOARD_CATEGORY = ${category} and BOARD_APPROVE = 'Y' and FILE_THUMBNAIL = '1' 
+    		 order by B_MODIFY_DATE asc)
+   		 where RNUM between ${start} and ${end}
+	</select>
+	
+	
+	<select id="getboardAllCount" resultType="_int">
+		select count(*)
+        from board b
+   		JOIN BOARD_FILE USING(BOARD_NUMBER)
+    	where B_WRITER = #{userId} and BOARD_ENABLED = '1'and BOARD_CATEGORY = ${category} and BOARD_APPROVE = 'Y' and FILE_THUMBNAIL = '1'
+	</select>
+	
+	
+</mapper>

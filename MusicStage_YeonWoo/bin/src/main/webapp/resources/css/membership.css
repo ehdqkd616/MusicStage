@@ -1,0 +1,298 @@
+@charset "utf-8";
+
+#head_frame{
+    height: 80px; 
+    background-color: chartreuse;
+}
+#content_frame{
+    border-color: black;
+    border-width: 8px;
+    border-style: solid;
+    border-radius: 30px; 
+    margin-top: 60px;
+    margin-right: auto; 
+    margin-left: auto; 
+    width:900px; 
+    align-content: center; 
+    display: block; 
+    height: 1400px;
+
+}
+
+.content_frame_first{
+    border-style: solid;
+    background-color: white; 
+    border-width:1px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    border-color: #e4e5ed; 
+    width: 700px; 
+    height: 32px; 
+    text-align: left ; 
+    display: block;
+}
+.content_frame_first span{
+    color: darkblue; 
+    line-height: 30px; 
+    display: inline-block; 
+    margin-left: 20px; 
+    font-weight: bolder;
+}
+/* 중복된것0 */
+.content_frame_first_first{
+    border-style: solid; 
+    margin-top: 0px; 
+    margin-bottom: 0px; 
+    background-color: white; 
+    border-width:1px; 
+    margin-left: auto; 
+    margin-right: auto;
+    border-color:  #e4e5ed;
+    width: 700px; height:  50px; 
+    text-align: left ; 
+    display: block;
+
+}
+/* 중복된것 1 */
+.content_frame_first_second{
+    overflow-x: hidden; 
+    overflow-y: scroll; 
+    font-size: large;
+     border-style: solid; 
+     margin-top: 0px; 
+     margin-bottom: 0px;
+      background-color: white; 
+      border-width:1px; 
+      margin-left: auto; 
+      margin-right: auto; 
+      border-color:#e4e5ed;
+       width: 700px; 
+       height: 300px; 
+       text-align: left ; 
+       display: block; 
+       white-space: pre-line;
+}
+/* 글자 */
+.end_text{
+    color: darkblue; 
+    line-height: 50px;
+     display: inline-block;
+      margin-left: 20px;
+}
+/* 중복된것 2 */
+.content_frame_second{
+    border-style: solid; 
+    margin-top: 0px; 
+    margin-bottom: 0px; 
+    background-color: white; 
+    border-width:1px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    border-color: #e4e5ed; 
+    width: 700px; 
+    height: 50px; 
+    text-align: left ;
+    display: block;
+}
+/* 테이블 */
+.table_frame{
+    margin-left: auto;
+    width: 700px; 
+    margin-right: auto;
+     border-style: solid;
+       border-width: 1px;
+        border-color:  #e4e5ed;
+}
+/* 테이블 열 */
+.table_frame tr{
+    border-style: solid; 
+    border-width: 1px; 
+    border-color:  #e4e5ed;
+}
+/* 테이블 열> 행 */
+.table_frame tr td{
+    width: 300px;
+}
+/* 테이블   */
+.table_td_style{
+    width: 300px;
+     border-style: solid; 
+     border-width: 1px; 
+     border-left-width :0px ;
+     border-right-width:0px; 
+     border-color:  #e4e5ed ; 
+
+}
+/* 버튼 css */
+.button_css{
+    color: white; 
+    background-color: black; 
+    width: 150px; 
+    height: 45px; 
+    border-radius: 15px; 
+    position: relative;
+    display: block;
+    margin: 30px auto 0 auto;
+
+}
+/* 체크박스 */
+.checkbox_1{
+    width:30px; 
+    height: 20px;
+}
+
+/* 회원가입 2번째 페이지 css 시작 부분 */
+
+.input_frame{
+    width: 500px !important; 
+    height: 30px; 
+    border-radius: 15px; 
+    text-align: center; 
+    font-size: 1.5em;
+}
+.button_css2{
+    color: white;
+     background-color: black;
+      width: 150px;
+       height: 45px; 
+       border-radius: 15px; 
+       margin-left: 30px;
+}
+.input_frame_t{
+    margin-bottom: 10px;
+    width: 650px; 
+    height: 35px; 
+    border-radius: 15px; 
+    text-align: center; 
+    font-size: 1.5em;
+}
+
+.button_css3{
+    font-family: 'Nanum Gothic'; 
+    color: white;
+     background-color: rgba(255, 0, 0, 0.747);
+      width: 650px; 
+      height: 40px;
+      border-color: #e4e5ed;
+       border-radius: 15px; 
+}
+
+.button_css3_1{
+    font-family: 'Nanum Gothic'; 
+    color: white;
+     background-color: rgba(255, 0, 0, 0.747);
+      width: 250px; 
+      height: 40px;
+      border-color: #e4e5ed;
+       border-radius: 15px; 
+}
+.button_css4{
+    color: white;
+    background-color: black;
+    width: 150px;
+    height: 45px; 
+    border-radius: 15px; 
+    position: relative;
+    display: block;
+    margin: 30px auto 0 auto;
+}
+
+h4{
+    text-align: left;
+    margin-right: 1;
+    margin:20px
+}
+
+/* 회원가입 3번째 페이지 css 시작 부분 */
+.div_main_frame{
+    border: 1px; 
+    border-radius: 10px; 
+    width: 300px; 
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    border-style: solid; 
+    border-color:  #e4e5ed;
+}
+.headpoint{
+    text-align: center;
+    margin-top: 30px;
+}
+.backbutton{
+    margin-bottom: 10px; 
+    margin-top: 10px; 
+    display: inline; 
+    float: left; 
+    margin-left: 10px;
+}
+.headpoint_dot{
+    margin-bottom: 10px;
+     margin-top: 10px;
+      display: inline-block;
+       float: none;
+        margin-right: 10px;
+}
+.button_css5{
+    border: cornsilk;
+     border-radius: 10px; 
+     width: 280px; 
+     font-size: smaller;
+}
+.text_p{
+    font-size: 5px; 
+    color: darkgray;
+}
+.text_pp{
+    font-size: 4px;
+     text-align: center; 
+     margin-top: 20px;
+}
+.table_img_frame{
+    width: 50px; 
+    height: 50px; 
+    display: inline-block;
+    margin: 0 2px;
+}
+
+/* .table_img{
+	display:none;
+    width: 50px; 
+    height: 50px; 
+    border-radius: 5px; 
+} */
+
+/* 비밀번호 찾기 아이디 찾기 */
+.div_main_frame{
+    border: 1px; 
+    border-radius: 10px; 
+    width: 350px; 
+    height: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    border-style: solid; 
+    border-color:  #e4e5ed;
+}
+
+.input_frame_t_1{
+    margin-bottom: 10px;
+    width: 650px; 
+    height: 35px; 
+    border-radius: 15px; 
+    text-align: center; 
+    font-size: 1.5em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

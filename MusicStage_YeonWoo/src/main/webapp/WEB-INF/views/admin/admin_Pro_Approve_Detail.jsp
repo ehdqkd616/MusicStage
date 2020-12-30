@@ -349,12 +349,10 @@
                <div id="modal_table_title" align="center">전문가등록-거절</div>
                <div id="modal_select" align="center">
                   <select id="no_select" >
-                     <option>1번옵션</option>
-                     <option>2번옵션</option>
-                     <option>3번옵션</option>
-                     <option>4번옵션</option>
-                     <option>5번옵션</option>
-                     <option>6번옵션</option>
+						<option>전문가 자격 불충분</option>
+						<option>증빙서류 파일 누락/option>
+						<option>전문가 등록 양식 부적합</option>
+						<option>증빙 자료 불충분</option>
                   </select>
                </div>
                <div align= center>
