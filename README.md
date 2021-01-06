@@ -2,36 +2,37 @@
 코로나 19로 인하여 뮤지션의 무대가 줄어들고, 온라인에서 활동할 수 있는 공간이 필요해졌다. 기존의 커뮤니티 사이트의 단점을 보완하여 소셜 기반의 게시판과 메신저를 이용한 자유로운 소통, 관심 분야에 따른 친구 매칭 서비스, 친숙한 SNS UI를 차용한 감각 있는 디자인을 통해 이용자들에게 편의성과 실용성을 모두 만족시킬 수 있는 사이트를 만들고자 하였다.
 
 ### 개발 환경
-- Operating System : Window OS, MAC OS
-- Server : Apache Tomcat 9.0
-- Database : Oracle Database 18c
-- Development Tool : Eclipse, Spring Tools Suite 4, Visual Studio Code, sqlDeveloper version 19.2.1.247, Apache Maven
-- Development Language :  Java, JavaScript, jQuery, HTML5, CSS3, SQL, JSTL
-- Framework : Spring, Mybatis
-- Team Coop : Github, ERDCloud, kakaoOven
-- API: Swipper, Kakao Map, Kakao Login, SMTP
-- Technologies used : WebSocket, jQuery, Ajax, Push Notification
+- **Operating System** : Window OS, MAC OS
+- **Server** : Apache Tomcat 9.0
+- **Database** : Oracle Database 18c
+- **Development Tool** : Eclipse, Spring Tools Suite 4, Visual Studio Code, sqlDeveloper version 19.2.1.247, Apache Maven
+- **Development Language** :  Java, JavaScript, jQuery, HTML5, CSS3, SQL, JSTL
+- **Framework** : Spring, Mybatis
+- **Team Coop** : Github, ERDCloud, kakaoOven
+- **API** : Swipper, Kakao Map, Kakao Login, SMTP
+- **Technologies used** : WebSocket, jQuery, Ajax, Push Notification
 
 
 ### 구현 기능
-- 회원 : 회원가입(일반 회원가입, 카카오 회원가입 api, 카카오 맵 api), 회원정보 보기, 회원정보 수정(프로필 사진 등록/수정/삭제), 회원탈퇴, 로그인(일반 로그인, 카카오 로그인 api), 로그아웃, 계정 찾기(이름, 이메일 이용, Gmail api), 선호하는 관심사, 팔로잉, 스테이지(회원 상세 페이지 - 회원의 게시물 모아보기)
+- **회원** : 회원가입(일반 회원가입, 카카오 회원가입 api, 카카오 맵 api), 회원정보 보기, 회원정보 수정(프로필 사진 등록/수정/삭제), 회원탈퇴, 로그인(일반 로그인, 카카오 로그인 api), 로그아웃, 계정 찾기(이름, 이메일 이용, Gmail api), 선호하는 관심사, 팔로잉, 스테이지(회원 상세 페이지 - 회원의 게시물 모아보기)
 
-- 게시판 : 게시글 리스트 조회 및 검색(카테고리, 필터 별 검색), 게시글 피드형식/보드형식 조회, 게시글 등록/수정/삭제, 댓글과 대댓글 등록/수정/삭제, 이미지/동영상/오디오 파일 업로드
+- **게시판** : 게시글 리스트 조회 및 검색(카테고리, 필터 별 검색), 게시글 피드형식/보드형식 조회, 게시글 등록/수정/삭제, 댓글과 대댓글 등록/수정/삭제, 이미지/동영상/오디오 파일 업로드
 
-- 실시간 채팅 : 회원 간 실시간 채팅 및 브라우저 알림, 채팅 내용 DB 저장
+- **실시간 채팅** : 회원 간 실시간 채팅 및 브라우저 알림, 채팅 내용 DB 저장
 
-- 푸쉬 알림 : 댓글, 팔로잉, 좋아요, 전문가 등록요청, 게시글 등록요청, 회원/게시글 신고 처리에 대한 실시간 푸쉬 알림 및 알림 메세지 DB 저장
+- **푸쉬 알림** : 댓글, 팔로잉, 좋아요, 전문가 등록요청, 게시글 등록요청, 회원/게시글 신고 처리에 대한 실시간 푸쉬 알림 및 알림 메세지 DB 저장
 
-- 관리자 : 공지사항 등록, 전문가 등록 요청 승인/거부, 게시글 등록 요청 승인/거부, 회원/게시글 신고 승인/거부 및 패널티 처리
+- **관리자** : 공지사항 등록, 전문가 등록 요청 승인/거부, 게시글 등록 요청 승인/거부, 회원/게시글 신고 승인/거부 및 패널티 처리
 
-- 메인페이지 : 네비게이션 바, 검색 바, 카테고리 퀵 메뉴, 배너 인기서비스 목록(슬라이드 이미지)
+- **메인페이지** : 네비게이션 바, 검색 바, 카테고리 퀵 메뉴, 배너 인기서비스 목록(슬라이드 이미지)
 
 ### DB 설계
+![MusicStage ERD](https://user-images.githubusercontent.com/64412357/103772776-6325a180-506d-11eb-8407-85ec57c1eab0.png)
 
- 네 가지의 게시판을 ‘게시판 카테고리’ 컬럼으로 구분하여 하나의 테이블로 구성하였다. 모든 카테고리에서 사용하는 컬럼은 ‘NOT NULL’ 제약조건을 걸어 필수적으로 입력 값을 받도록 하였고, 게시판에 따라서 선택적으로 사용 가능한 컬럼들은 ‘Nullable’로 처리하였다. 이 외에 다른 목적으로 사용되는 게시판과 첨부파일은 ‘게시판 테이블’, ‘첨부파일 테이블’을 한 쌍으로 하여 각각 테이블을 따로 만들어 관리하였다. <br>
- 첨부파일의 확장자에 따라서 파일 종류를 ‘IMAGE’, ‘AUDIO’, ‘VIDEO’로 구분하여 관리하였고, ‘FILE_THUMBNAIL’ 컬럼을 두어 썸네일 파일을 구분하였다. <br>
- 푸쉬 알림을 DB에 기록하기 위해 알림이 발생하는 모든 테이블의 기본키를 외래키로 설정하여 제약조건을 설정하였고, ‘ALARM_TYPE’ 컬럼으로 알림이 발생한 테이블과 알림 클릭 시의 액션을 구분하였다. <br>
- ‘CHATTING_ROOM’ 테이블을 이용하여 채팅방을 생성하고, ‘JOIN_ROOM’ 테이블을 통해서 채팅방을 구분하여 관리한다. 1대1 채팅 시스템이기 때문에 채팅방 생성 시 ‘JOIN_ROOM’ 테이블에는 채팅에 참여하는 ‘본인’과 ‘상대방’의 정보가 동일한 ‘CHATROOM_ID’로 입력되어 두 개의 행이 생성된다. <br>
+ - **게시판 관련 테이블** : 네 가지의 게시판을 ‘게시판 카테고리’ 컬럼으로 구분하여 하나의 테이블로 구성하였다. 모든 카테고리에서 사용하는 컬럼은 ‘NOT NULL’ 제약조건을 걸어 필수적으로 입력 값을 받도록 하였고, 게시판에 따라서 선택적으로 사용 가능한 컬럼들은 ‘Nullable’로 처리하였다. 이 외에 다른 목적으로 사용되는 게시판과 첨부파일은 ‘게시판 테이블’, ‘첨부파일 테이블’을 한 쌍으로 하여 각각 테이블을 따로 만들어 관리하였다.
+ - **첨부파일 테이블** : 첨부파일의 확장자에 따라서 파일 종류를 ‘IMAGE’, ‘AUDIO’, ‘VIDEO’로 구분하여 관리하였고, ‘FILE_THUMBNAIL’ 컬럼을 두어 썸네일 파일을 구분하였다.
+ - **알림 관련 테이블** : 푸쉬 알림을 DB에 기록하기 위해 알림이 발생하는 모든 테이블의 기본키를 외래키로 설정하여 제약조건을 설정하였고, ‘ALARM_TYPE’ 컬럼으로 알림이 발생한 테이블과 알림 클릭 시의 액션을 구분하였다. 
+ - **채팅 관련 테이블** : ‘CHATTING_ROOM’ 테이블을 이용하여 채팅방을 생성하고, ‘JOIN_ROOM’ 테이블을 통해서 채팅방을 구분하여 관리한다. 1대1 채팅 시스템이기 때문에 채팅방 생성 시 ‘JOIN_ROOM’ 테이블에는 채팅에 참여하는 ‘본인’과 ‘상대방’의 정보가 동일한 ‘CHATROOM_ID’로 입력되어 두 개의 행이 생성된다.
 
 
 ## :desktop_computer: 화면 일부<br><br>
