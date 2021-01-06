@@ -64,14 +64,26 @@ ___
 |:--------:|:--------:|:-----------:|
 |<img src="https://user-images.githubusercontent.com/64412357/103780263-1b584780-5078-11eb-8cef-7e3cca5caa3a.png" width="350px" height="450px" alt="MusicStage_InsertMember1">|<img src="https://user-images.githubusercontent.com/64412357/103780268-1c897480-5078-11eb-8e0f-663ccc643183.png" width="350px" height="450px" alt="MusicStage_InsertMember2">|!<img src="https://user-images.githubusercontent.com/64412357/103783861-94599e00-507c-11eb-870b-6b2905b049c9.png" width="200px" height="200px" alt="MusicStage_Interests">|
 
-<br>
-
 1. 일반 회원가입, 카카오 회원가입 시 모두 약관 동의 후 회원가입이 진행된다.
 2. 아이디, 비밀번호, 이메일, 휴대폰 등의 정보를 정해진 정규표현식에 맞게 작성해야하고, 아이디는 중복확인을 해야한다.
 3. 일반 회원가입의 경우 이메일 인증을 해야 하고, 카카오 회원가입의 경우 이메일 인증 과정은 생략한다.
 4. 마지막으로 4가지의 관심사를 설정하면 회원가입이 완료된다.
 
 <br>
+
+### Stage
+MyStage YouStage
+
+### 커뮤니티
+Feed형식 Board형식
+
+### 알림
+
+
+
+### 채팅
+
+
 
  - 마이페이지 일부<br>
 
