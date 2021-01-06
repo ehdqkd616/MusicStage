@@ -1,25 +1,15 @@
-# MusicStage
+# :musical_note: MusicStage (음악 통합 커뮤니티) 
 SNS-based Music Community Website
 
-
-# :world_map: TRIP2REAP (국내 여행정보 웹사이트)
-### 20.09.21 ~ 20.12.21
-
-:ok_person: &nbsp; 팀장 : 김기쁨<br>
-:family_woman_woman_girl_girl: 팀원 : 김수진, 이규호, 최은강
-
 #
-
-:globe_with_meridians: 개발환경
+개발환경
 - Server : Apache Tomcat 9.0
-- Database : Oracle 11g
+- Database : Oracle Database 18c
 - Development Tool : Eclipse 4.15.0, sqlDeveloper version 19.2.1.247, Apache Maven
-- Development Language :  JAVA , HTML5, CSS3, JavaScript, jQuery, SQL, JSP
-- Web Framework: spring, Mybatis
+- Development Language :  JAVA, JavaScript, jQuery, HTML5, CSS3, SQL, JSP
+- Web Framework: Spring, Mybatis
 - Team Coop : Github, ERDCloud, kakaoOven
-- API: Swal, Swipper, kakao map, kakao login, naver login, SMTP, I'mport
-
-
+- API: Swipper, kakao map, kakao login, SMTP
 #
 
   :pencil2: 개요                                  
