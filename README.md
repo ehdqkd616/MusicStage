@@ -39,7 +39,7 @@ ___
 
 
 ## 페이지
- - 메인 페이지
+ ### 메인 페이지
 
 ![MusicStage_MainPage](https://user-images.githubusercontent.com/64412357/103777831-ca931f80-5074-11eb-98d7-3b8abf08290c.png)
 
@@ -49,15 +49,16 @@ ___
 
 <br><br>
 
- - 로그인<br>
+ ### 로그인
 
 ![MusicStage_LoginPage](https://user-images.githubusercontent.com/64412357/103778820-2316ec80-5076-11eb-9159-1197ef9edb5b.png)
  
 - 로그인, 일반 회원가입, 카카오 회원가입이 가능하다.
 - 회원 이름과 이메일을 통해 아이디를 찾을 수 있고, 아이디와 이메일을 통해 임시 비밀번호를 부여받을 수 있다.
 
+<br><br>
 
- - 회원가입<br>
+ ### 회원가입
 
 | 약관 동의 | 회원 가입 |
 |:--------:|:--------:|
