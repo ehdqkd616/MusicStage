@@ -47,7 +47,7 @@ ___
 - 하단의 STAGE 인기 서비스에 사이트에서 제공하는 서비스들이 나열되어 있고 클릭 시에 해당 서비스에 대한 내용을 자세히 볼 수 있다.
 - 화면 우측 상단에는 로그인과 회원가입 버튼이 있고, 사용자는 로그인을 통해 보다 다양한 서비스를 이용할 수 있다.
 
-<br><br>
+<br>
 
  ### 로그인
 
@@ -56,21 +56,22 @@ ___
 - 로그인, 일반 회원가입, 카카오 회원가입이 가능하다.
 - 회원 이름과 이메일을 통해 아이디를 찾을 수 있고, 아이디와 이메일을 통해 임시 비밀번호를 부여받을 수 있다.
 
-<br><br>
+<br>
 
  ### 회원가입
 
-| 약관 동의 | 회원 가입 |
-|:--------:|:--------:|
-|<img src="https://user-images.githubusercontent.com/64412357/103780263-1b584780-5078-11eb-8cef-7e3cca5caa3a.png" width="450px" height="600px" alt="MusicStage_InsertMember1">|<img src="https://user-images.githubusercontent.com/64412357/103780268-1c897480-5078-11eb-8e0f-663ccc643183.png" width="450px" height="600px" alt="MusicStage_InsertMember2">|
-
-
+| 약관 동의 | 회원 가입 | 관심사 선택 |
+|:--------:|:--------:|:-----------:|
+|<img src="https://user-images.githubusercontent.com/64412357/103780263-1b584780-5078-11eb-8cef-7e3cca5caa3a.png" width="350px" height="450px" alt="MusicStage_InsertMember1">|<img src="https://user-images.githubusercontent.com/64412357/103780268-1c897480-5078-11eb-8e0f-663ccc643183.png" width="350px" height="450px" alt="MusicStage_InsertMember2">|!<img src="https://user-images.githubusercontent.com/64412357/103783861-94599e00-507c-11eb-870b-6b2905b049c9.png" width="200px" height="200px" alt="MusicStage_Interests">|
 
 <br>
-**각 항목마다 규칙에 어긋난 값을 입력할 경우 빨간색 글씨로 알림메시지를 띄워줍니다. <br>
-또 회원가입을 위해서는 반드시 이메일 인증을 해야하는데요~ 10분 안에 메일 인증을 완료해야 합니다. <br> 시간이 초과되면 alert창이 뜨고, 다시 인증버튼이 생성됩니다.**
 
-<br><br>
+1. 일반 회원가입, 카카오 회원가입 시 모두 약관 동의 후 회원가입이 진행된다.
+2. 아이디, 비밀번호, 이메일, 휴대폰 등의 정보를 정해진 정규표현식에 맞게 작성해야하고, 아이디는 중복확인을 해야한다.
+3. 일반 회원가입의 경우 이메일 인증을 해야 하고, 카카오 회원가입의 경우 이메일 인증 과정은 생략한다.
+4. 마지막으로 4가지의 관심사를 설정하면 회원가입이 완료된다.
+
+<br>
 
  - 마이페이지 일부<br>
 
