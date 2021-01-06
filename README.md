@@ -38,8 +38,8 @@ ___
  - **채팅 관련 테이블** : ‘CHATTING_ROOM’ 테이블을 이용하여 채팅방을 생성하고, ‘JOIN_ROOM’ 테이블을 통해서 채팅방을 구분하여 관리한다. 1대1 채팅 시스템이기 때문에 채팅방 생성 시 ‘JOIN_ROOM’ 테이블에는 채팅에 참여하는 ‘본인’과 ‘상대방’의 정보가 동일한 ‘CHATROOM_ID’로 입력되어 두 개의 행이 생성된다.
 
 
-## :desktop_computer: 화면 일부<br><br>
- - 메인화면<br>
+## 페이지
+ - 메인 페이지
 
 ![](./images/image/main.JPG)
 <br>
@@ -107,9 +107,3 @@ ___
 <br><br>
 
 
-
-## 활용 기술 스택
-- Language: Java, JavaScript, jQuery, Ajax, Websocket
-- API: Kakao 회원가입·로그인, Kakao Map(도로명 주소에 해당하는 지도 위치 표시), Gmail(비밀번호 찾기 임시비밀번호 전송)
-- Framework: Spring
-- Database: Oracle Database 18c
