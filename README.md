@@ -94,8 +94,32 @@ ___
 |:--------:|:--------:|
 |![MusicStage_Feed](https://user-images.githubusercontent.com/64412357/103871159-0e873280-5110-11eb-8f31-074698f37cc9.png)|![MusicStage_Board](https://user-images.githubusercontent.com/64412357/103871164-0fb85f80-5110-11eb-99cd-e3ba4d8810b1.png)|
 
-| Modal 보기 | 상세 보기 |
-|:--------:|:--------:|
+
+
+<br>
+
+**Modal 보기**
+
+![MusicStage_Modal](https://user-images.githubusercontent.com/64412357/103873457-2ad89e80-5113-11eb-907c-495130126ab8.png)
+<br>
+
+
+
+<br>
+
+| 상세보기 상단 | 상세보기 하단 |
+|:------------:|:------------:|
+|![MusicStage_DetailTop](https://user-images.githubusercontent.com/64412357/103873462-2c09cb80-5113-11eb-897d-01d4ecea58ba.png)|![MusicStage_DetailBottom](https://user-images.githubusercontent.com/64412357/103873463-2ca26200-5113-11eb-8151-0872af702de4.png)|
+
+**검색 필터**
+| 뷰 | 찾아요 | 칼럼 | 리뷰 |
+|:---:|:----:|:----:|:----:|
+|![MusicStage_FilterView](https://user-images.githubusercontent.com/64412357/103874823-fcf45980-5114-11eb-932a-6e227faafe00.png)|![MusicStage_FilterSearch](https://user-images.githubusercontent.com/64412357/103874822-fc5bc300-5114-11eb-9e13-e44ee2482388.png)|![MusicStage_FilterColumn](https://user-images.githubusercontent.com/64412357/103874817-fbc32c80-5114-11eb-8991-f5ccf34ff64a.png)|![MusicStage_FilterReview](https://user-images.githubusercontent.com/64412357/103874343-62941600-5114-11eb-90ce-b7eee5fff730.png)|
+
+
+
+
+
 
 
 ### 신고
