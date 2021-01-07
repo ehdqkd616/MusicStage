@@ -10,7 +10,7 @@ ___
 - **Development Language** :  Java, JavaScript, jQuery, HTML5, CSS3, SQL, JSTL
 - **Framework** : Spring, Mybatis
 - **Team Coop** : Github, ERDCloud, kakaoOven
-- **API** : Swipper, Kakao Map, Kakao Login, SMTP
+- **API** : Swipper, Kakao Map, Kakao Login, SMTP, 학과 정보
 - **Technologies used** : WebSocket, jQuery, Ajax, Push Notification
 
 
@@ -90,7 +90,13 @@ ___
 <br>
 
 ### 커뮤니티
-Feed형식 Board형식
+| Feed 보기 | Board 보기 |
+|:--------:|:--------:|
+|![MusicStage_Feed](https://user-images.githubusercontent.com/64412357/103871159-0e873280-5110-11eb-8f31-074698f37cc9.png)|![MusicStage_Board](https://user-images.githubusercontent.com/64412357/103871164-0fb85f80-5110-11eb-99cd-e3ba4d8810b1.png)|
+
+| Modal 보기 | 상세 보기 |
+|:--------:|:--------:|
+
 
 ### 신고
 
@@ -101,7 +107,7 @@ Feed형식 Board형식
 |![MusicStage_SystemAlarm](https://user-images.githubusercontent.com/64412357/103868829-c9adcc80-510c-11eb-848a-a00b49eeb66e.png)|![MusicStage_SocialAlarm](https://user-images.githubusercontent.com/64412357/103868826-c9adcc80-510c-11eb-8283-db6a3d72a9b6.png)|![MusicStage_AlarmDetail](https://user-images.githubusercontent.com/64412357/103868822-c7e40900-510c-11eb-99d7-7b20aa17cd18.png)|
 
 **푸쉬 알림** <br>
-|![MusicStage_PushAlarm](https://user-images.githubusercontent.com/64412357/103868825-c9153600-510c-11eb-91b3-29f0e9b06009.png) <br>
+![MusicStage_PushAlarm](https://user-images.githubusercontent.com/64412357/103868825-c9153600-510c-11eb-91b3-29f0e9b06009.png) <br>
 
 - 네비게이션 바의 알림 아이콘을 클릭하면 시스템 알림과 소셜 알림을 확인할 수 있다. 
 - 알림 아이콘 옆에는 확인하지 않은 알림의 숫자가 표시된다. 
