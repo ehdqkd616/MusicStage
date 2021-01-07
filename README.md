@@ -96,10 +96,26 @@ Feed형식 Board형식
 
 
 ### 알림
+| 시스템 알림 | 게시물 알림 | 알림 상세보기 |
+|:----------:|:----------:|:------------:|
+|![MusicStage_SystemAlarm](https://user-images.githubusercontent.com/64412357/103868829-c9adcc80-510c-11eb-848a-a00b49eeb66e.png)|![MusicStage_SocialAlarm](https://user-images.githubusercontent.com/64412357/103868826-c9adcc80-510c-11eb-8283-db6a3d72a9b6.png)|![MusicStage_AlarmDetail](https://user-images.githubusercontent.com/64412357/103868822-c7e40900-510c-11eb-99d7-7b20aa17cd18.png)|
 
+**푸쉬 알림** <br>
+|![MusicStage_PushAlarm](https://user-images.githubusercontent.com/64412357/103868825-c9153600-510c-11eb-91b3-29f0e9b06009.png) <br>
+
+- 네비게이션 바의 알림 아이콘을 클릭하면 시스템 알림과 소셜 알림을 확인할 수 있다. 
+- 알림 아이콘 옆에는 확인하지 않은 알림의 숫자가 표시된다. 
+- 온라인 시 알림이 발생하면 브라우저 푸쉬 알림을 받을 수 있다.
+- 알림 클릭 시 시스템 알림의 경우 알림 상세보기 페이지로, 게시물 알림의 경우 게시글 또는 회원의 Stage로 이동한다.
 
 ### 채팅
+![MusicStage_Chatting](https://user-images.githubusercontent.com/64412357/103868824-c87c9f80-510c-11eb-9e64-fdda97ec0b01.png)
 
+- 웹소켓을 통해 실시간으로 채팅이 가능하고, 채팅 메세지는 메세지 전송 성공 시 실시간으로 DB에 저장된다.
+- 채팅창의 왼쪽은 상대방의 메시지가, 오른쪽에는 사용자의 메시지가 표시된다. 
+- 채팅 목록에는 가장 마지막으로 받은 혹은 보낸 메시지의 내용과 시간이 표시되고, 읽지 않은 메시지의 개수가 표시된다.
+
+<br>
 
 ### 관리자
 
