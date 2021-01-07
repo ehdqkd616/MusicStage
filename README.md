@@ -77,17 +77,30 @@ ___
 <br>
 
 ### Stage
-MyStage YouStage
+| MyStage | YouStage |
+|:--------:|:--------:|
+|![MusicStage_MyStagePage](https://user-images.githubusercontent.com/64412357/103860670-5fdaf600-50ff-11eb-8f29-e568cc751ee0.png)|![MusicStage_YouStagePage](https://user-images.githubusercontent.com/64412357/103860673-61a4b980-50ff-11eb-9a8a-807b9bac0984.png)|
+
+- MyStage와 YouStage는 회원이 올린 게시글을 모아볼 수 있는 공간이다.
+- 상단에 닉네임, 게시물 개수, 팔로워·팔로잉 수, 자기소개 글이 표시된다.
+- 전문가 여부에 따라 닉네임 옆에 전문가를 상징하는 로고가 나타나고, 자기소개 글 상단에 전문가 등록시 작성했던 프로필이 나타난다.
+- MyStage의 경우 계정관리, 팔로워/팔로우 목록 조회를 할 수 있고, YouStage의 경우 메세지 보내기, 팔로우 요청·취소할 수 있다.
+- 네 가지 카테고리별 게시글을 조회할 수 있다.
+
+<br>
 
 ### 커뮤니티
 Feed형식 Board형식
 
-### 알림
+### 신고
 
+
+### 알림
 
 
 ### 채팅
 
 
+### 관리자
 
 
