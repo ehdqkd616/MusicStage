@@ -35,7 +35,7 @@ ___
 <a href="https://www.erdcloud.com/d/FEwvHLJTa9j6xwYT2" target="_blank">MusicStage ERD(정리)</a>
 <br>
 <a href="https://www.erdcloud.com/d/bioA6Ecp33mEh8qZP" target="_blank">MusicStage ERD(설명)</a>
-<
+
 
  - **게시판 관련 테이블** : 네 가지의 게시판을 ‘게시판 카테고리’ 컬럼으로 구분하여 하나의 테이블로 구성하였다. 모든 카테고리에서 사용하는 컬럼은 ‘NOT NULL’ 제약조건을 걸어 필수적으로 입력 값을 받도록 하였고, 게시판에 따라서 선택적으로 사용 가능한 컬럼들은 ‘Nullable’로 처리하였다. 이 외에 다른 목적으로 사용되는 게시판과 첨부파일은 ‘게시판 테이블’, ‘첨부파일 테이블’을 한 쌍으로 하여 각각 테이블을 따로 만들어 관리하였다.
  - **첨부파일 테이블** : 첨부파일의 확장자에 따라서 파일 종류를 ‘IMAGE’, ‘AUDIO’, ‘VIDEO’로 구분하여 관리하였고, ‘FILE_THUMBNAIL’ 컬럼을 두어 썸네일 파일을 구분하였다.
