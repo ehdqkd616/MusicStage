@@ -94,16 +94,21 @@ ___
 |:--------:|:--------:|
 |![MusicStage_Feed](https://user-images.githubusercontent.com/64412357/103871159-0e873280-5110-11eb-8f31-074698f37cc9.png)|![MusicStage_Board](https://user-images.githubusercontent.com/64412357/103871164-0fb85f80-5110-11eb-99cd-e3ba4d8810b1.png)|
 
+<br>
 
+- 게시판은 소셜, 찾아요, 컬럼, 리뷰 네개로 구성되어 있고, 버튼을 클릭하여 게시판별 게시글을 조회할 수 있다.
+- 게시글 보기는 Feed 보기, Board 보기, Modal 보기, 상세 보기로 나뉘어져 있으며, 우측의 Filter를 클릭하여 Feed 보기, Board 보기를 선택할 수 있다.
 
 <br>
 
 **Modal 보기**
 
 ![MusicStage_Modal](https://user-images.githubusercontent.com/64412357/103873457-2ad89e80-5113-11eb-907c-495130126ab8.png)
+
 <br>
 
-
+- Feed 보기에서 게시글 클릭 시 Modal 보기로 넘어가며, Modal 보기에서 상세보기 클릭 시 상세보기 페이지로 넘어간다.
+- Feed 보기, Modal 보기에서 좋아요, 댓글, 대댓글, 메세지 보내기, 게시물 저장 기능을 이용할 수 있고, 슬라이드 기능을 통해 해당 게시글의 이미지, 비디오, 오디오 파일들을 보거나 재생시킬 수 있다.
 
 <br>
 
@@ -111,12 +116,22 @@ ___
 |:------------:|:------------:|
 |![MusicStage_DetailTop](https://user-images.githubusercontent.com/64412357/103873462-2c09cb80-5113-11eb-897d-01d4ecea58ba.png)|![MusicStage_DetailBottom](https://user-images.githubusercontent.com/64412357/103873463-2ca26200-5113-11eb-8151-0872af702de4.png)|
 
+<br>
+
+- 상세보기 페이지에서는 Feed 보기와 Modal 보기에서 표시되지 않는 게시글의 모든 내용을 확인할 수 있다.
+
+<br>
+
 **검색 필터**
 | 뷰 | 찾아요 | 칼럼 | 리뷰 |
 |:---:|:----:|:----:|:----:|
 |![MusicStage_FilterView](https://user-images.githubusercontent.com/64412357/103874823-fcf45980-5114-11eb-932a-6e227faafe00.png)|![MusicStage_FilterSearch](https://user-images.githubusercontent.com/64412357/103874822-fc5bc300-5114-11eb-9e13-e44ee2482388.png)|![MusicStage_FilterColumn](https://user-images.githubusercontent.com/64412357/103874817-fbc32c80-5114-11eb-8991-f5ccf34ff64a.png)|![MusicStage_FilterReview](https://user-images.githubusercontent.com/64412357/103874343-62941600-5114-11eb-90ce-b7eee5fff730.png)|
 
+<br>
 
+- 게시판별 검색 필터를 이용하여 원하는 게시물을 검색할 수 있다.
+
+<br>
 
 
 
