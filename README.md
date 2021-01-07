@@ -88,6 +88,18 @@ ___
 
 <br>
 
+### 전문가 등록
+
+![MusicStage_RegisterPro](https://user-images.githubusercontent.com/64412357/103884673-3f706300-5122-11eb-9fc2-05acae848f38.png)
+
+<br>
+
+- 전문가 등록 요청 후 관리자의 승인을 통해 전문가 회원이 되면 보다 더 많은 서비스를 이용할 수 있다.
+- 학과 정보 API를 이용하여 학력 조회 및 작성을 보다 편리하게 할 수 있다.
+- 학력, 경력, 자격증 등을 증빙할 수 있는 파일을 업로드 할 수 있다.
+
+<br>
+
 ### Stage
 | MyStage | YouStage |
 |:--------:|:--------:|
@@ -142,6 +154,22 @@ ___
 <br>
 
 - 게시판별 검색 필터를 이용하여 원하는 게시물을 검색할 수 있다.
+
+<br>
+
+### 게시글 작성
+| 제목·내용·썸네일 | 이미지 파일 |
+|:--------------:|:-----------:|
+|![MusicStage_BoardWrite1](https://user-images.githubusercontent.com/64412357/103882753-9cb6e500-511f-11eb-8c30-429c1de822ce.png)|![MusicStage_BoardWrite2](https://user-images.githubusercontent.com/64412357/103882748-9aed2180-511f-11eb-9c85-9229661e8e5f.png)|
+
+| 오디오·비디오 파일 | 선택 사항 |
+|:----------------:|:---------:|
+|![MusicStage_BoardWrite3](https://user-images.githubusercontent.com/64412357/103882755-9cb6e500-511f-11eb-8be7-ed1d68396837.png)|![MusicStage_BoardWrite4](https://user-images.githubusercontent.com/64412357/103882757-9d4f7b80-511f-11eb-99ec-a84ec09f9c36.png)|
+
+- 제목, 카테고리 설정 아래부분에 첨부한 썸네일과 내용 등 작성된 글의 미리보기가 실시간으로 제공된다.
+- 이미지, 오디오, 비디오 파일을 여러개 첨부할 수 있다. 
+- 선택사항으로 커리큘럼, 장소, 제공형식 등을 추가로 입력할 수 있다.
+- 장소 입력시 카카오 맵 API를 이용하여 원하는 장소를 검색, 표시할 수 있다.
 
 <br>
 
